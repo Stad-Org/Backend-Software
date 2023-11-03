@@ -24,7 +24,7 @@ jobs:
   cd: 
     runs-on: ubuntu-latest 
     needs: ci 
-    if: github.ref == "refs/heads/main" # add comment here 
+    if: github.ref == 'refs/heads/main' # add comment here 
     steps: 
       - name : Chekout repo 
         uses: actions/checkout@v2
