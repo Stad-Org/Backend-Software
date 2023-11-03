@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest #σε τι μηχάνημα τρέχει 
     steps: 
       - name: Checkout repo 
-        uses: action/checkout@v2 #library
+        uses: actions/checkout@v2 #library
       
       - name: Setup node
-        uses: action/setup-node@v3
+        uses: actions/setup-node@v3
         with:
           node-version: 16 
 
