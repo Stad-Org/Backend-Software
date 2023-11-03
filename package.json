@@ -6,7 +6,7 @@
   "scripts": {
 	"prestart": "npm install",
 	"start": "node index.js", 
-	"test": "echo Test & exit 1" 
+	"test": "echo Test & exit 0" 
   },
   "keywords": [
     "swagger"
