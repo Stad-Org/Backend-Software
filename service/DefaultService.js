@@ -2,54 +2,6 @@
 
 
 /**
- * upload student tests
- * allows the admin to upload student tests
- *
- * body Test Test file
- * userName String the name of the user
- * className String the name of the class
- * no response value expected for this operation
- **/
-exports.adminClassClassNameUserUserNameTestsPOST = function(body,userName,className) {
-  return new Promise(function(resolve, reject) {
-    resolve();
-  });
-}
-
-
-/**
- * upload exercises
- * the teacher wants to upload exercises
- *
- * body ExerciseSolutionUpload  (optional)
- * userName String the name of the user
- * className String the name of the class
- * no response value expected for this operation
- **/
-exports.classClassNameUserUserNameExercisesPOST = function(body,userName,className) {
-  return new Promise(function(resolve, reject) {
-    resolve();
-  });
-}
-
-
-/**
- * upload notes
- * the teacher wants to upload notes
- *
- * body NoteUpload note model
- * userName String the name of the user
- * className String the name of the class
- * no response value expected for this operation
- **/
-exports.classClassNameUserUserNameNotesPOST = function(body,userName,className) {
-  return new Promise(function(resolve, reject) {
-    resolve();
-  });
-}
-
-
-/**
  * create a class
  * the secretary must be able to create a class
  *
@@ -66,23 +18,10 @@ exports.createClass = function(body) {
 /**
  * Create a new user account
  *
- * body User message model
+ * body User user model
  * no response value expected for this operation
  **/
 exports.createUser = function(body) {
-  return new Promise(function(resolve, reject) {
-    resolve();
-  });
-}
-
-
-/**
- * delete a certain notification
- *
- * notificationId Long the name id of the notification
- * no response value expected for this operation
- **/
-exports.deleteAdminNotificationById = function(notificationId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
@@ -103,6 +42,21 @@ exports.deleteClass = function(className) {
 
 
 /**
+ * delete a message
+ *
+ * userName String the name of the user
+ * className String the name of the class
+ * messageID String the id of the message
+ * no response value expected for this operation
+ **/
+exports.deleteMessage = function(userName,className,messageID) {
+  return new Promise(function(resolve, reject) {
+    resolve();
+  });
+}
+
+
+/**
  * delete a user
  *
  * userName String The user name for deletetion
@@ -116,100 +70,15 @@ exports.deleteUser = function(userName) {
 
 
 /**
- * edit a certain notification
- * F5- Το σύστημα θα πρέπει να ειδοποιεί τον χρήστη για νέες ειδοποιήσεις
- *
- * body NewNotification notification model
- * notificationId Long the name id of the notification
- * no response value expected for this operation
- **/
-exports.editAdminNotificationById = function(body,notificationId) {
-  return new Promise(function(resolve, reject) {
-    resolve();
-  });
-}
-
-
-/**
  * edit the user details
  *
- * body User message model
+ * body User user model
  * userName String the name of the user
  * no response value expected for this operation
  **/
 exports.editUserInfo = function(body,userName) {
   return new Promise(function(resolve, reject) {
     resolve();
-  });
-}
-
-
-/**
- * edit the role of the user
- * the admin must be able to edit the roles of the users
- *
- * body Role  (optional)
- * userName Long the name id of the notification
- * no response value expected for this operation
- **/
-exports.editUserRole = function(body,userName) {
-  return new Promise(function(resolve, reject) {
-    resolve();
-  });
-}
-
-
-/**
- * upload exercises solution
- * the student wants to upload exercises' solutions
- *
- * body ExerciseSolutionUpload  (optional)
- * userName String the name of the user
- * subjectName String the name of the class
- * no response value expected for this operation
- **/
-exports.exerciseSolution = function(body,userName,subjectName) {
-  return new Promise(function(resolve, reject) {
-    resolve();
-  });
-}
-
-
-/**
- * get a certain notification
- * F5- Το σύστημα θα πρέπει να ειδοποιεί τον χρήστη για νέες ειδοποιήσεις
- *
- * notificationId Long the name id of the notification
- * returns Notification
- **/
-exports.getAdminNotificationById = function(notificationId) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = "";
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-}
-
-
-/**
- * get all the notifications
- * F5- Το σύστημα θα πρέπει να ειδοποιεί τον χρήστη για νέες ειδοποιήσεις
- *
- * returns Notifications
- **/
-exports.getAdminNotifications = function() {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ "", "" ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
   });
 }
 
@@ -370,78 +239,6 @@ exports.getUserInfo = function(userName) {
 
 
 /**
- * get a notification of the user using its id
- * F5- Το σύστημα θα πρέπει να ειδοποιεί τον χρήστη για νέες ειδοποιήσεις
- *
- * userName String the name of the user
- * notificationId Long the name id of the notification
- * returns Notification
- **/
-exports.getUserNotificationById = function(userName,notificationId) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = "";
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-}
-
-
-/**
- * get the notifications of the user
- * F5- Το σύστημα θα πρέπει να ειδοποιεί τον χρήστη για νέες ειδοποιήσεις
- *
- * userName String the name of the user
- * returns Notifications
- **/
-exports.getUserNotifications = function(userName) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ "", "" ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-}
-
-
-/**
- * upload exercises grade
- * the teacher wants to upload exercises' grade
- *
- * body ExerciseGradeUpload  (optional)
- * userName String the name of the user
- * className String the name of the class
- * exerciseId String the name of the class
- * no response value expected for this operation
- **/
-exports.gradeExercise = function(body,userName,className,exerciseId) {
-  return new Promise(function(resolve, reject) {
-    resolve();
-  });
-}
-
-
-/**
- * Logs user into the system
- *
- * username String The user name for login
- * password String The password for login in clear text
- * no response value expected for this operation
- **/
-exports.loginUser = function(username,password) {
-  return new Promise(function(resolve, reject) {
-    resolve();
-  });
-}
-
-
-/**
  * post a message to the classroom
  *
  * body NewMessage message model
@@ -450,19 +247,6 @@ exports.loginUser = function(username,password) {
  * no response value expected for this operation
  **/
 exports.postClassMessage = function(body,userName,className) {
-  return new Promise(function(resolve, reject) {
-    resolve();
-  });
-}
-
-
-/**
- * post a notification
- *
- * body NewNotification notification model
- * no response value expected for this operation
- **/
-exports.postNotification = function(body) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
@@ -499,24 +283,9 @@ exports.putClassInfoAdmin = function(body,className) {
 
 
 /**
- * update the schedule
- * the admin must be able to edit the schedule
- *
- * body ScheduleItemUpload  (optional)
- * className String the name of the class
- * no response value expected for this operation
- **/
-exports.updateSchedule = function(body,className) {
-  return new Promise(function(resolve, reject) {
-    resolve();
-  });
-}
-
-
-/**
  * upload student grades in tests
  *
- * body Grade notification model
+ * body Grade grade model
  * userName String the name of the user
  * className String the name of the class
  * no response value expected for this operation

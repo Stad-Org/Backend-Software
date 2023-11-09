@@ -213,6 +213,41 @@ paths:
         "400":
           description: bad request
       x-swagger-router-controller: Default
+  /user/{userName}/class/{className}/chat/{messageID}:
+    delete:
+      summary: delete a message
+      operationId: deleteMessage
+      parameters:
+      - name: userName
+        in: path
+        description: the name of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: className
+        in: path
+        description: the name of the class
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: messageID
+        in: path
+        description: the id of the message
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful deletetion
+        "400":
+          description: bad request
+      x-swagger-router-controller: Default
   /user/{userName}:
     get:
       summary: get the user details
@@ -290,155 +325,6 @@ paths:
         "400":
           description: bad request
       x-swagger-router-controller: Default
-  /user/{userName}/notifications:
-    get:
-      summary: get the notifications of the user
-      description: F5- Το σύστημα θα πρέπει να ειδοποιεί τον χρήστη για νέες ειδοποιήσεις
-      operationId: getUserNotifications
-      parameters:
-      - name: userName
-        in: path
-        description: the name of the user
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Notifications'
-        "400":
-          description: bad request
-      x-swagger-router-controller: Default
-  /user/{userName}/notifications/{notificationId}:
-    get:
-      summary: get a notification of the user using its id
-      description: F5- Το σύστημα θα πρέπει να ειδοποιεί τον χρήστη για νέες ειδοποιήσεις
-      operationId: getUserNotificationById
-      parameters:
-      - name: userName
-        in: path
-        description: the name of the user
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: notificationId
-        in: path
-        description: the name id of the notification
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Notification'
-        "400":
-          description: bad request
-      x-swagger-router-controller: Default
-  /admin/notifications:
-    get:
-      summary: get all the notifications
-      description: F5- Το σύστημα θα πρέπει να ειδοποιεί τον χρήστη για νέες ειδοποιήσεις
-      operationId: getAdminNotifications
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Notifications'
-        "400":
-          description: bad request
-      x-swagger-router-controller: Default
-    post:
-      summary: post a notification
-      operationId: postNotification
-      requestBody:
-        $ref: '#/components/requestBodies/NewNotification'
-      responses:
-        "200":
-          description: successful deletetion
-        "400":
-          description: bad request
-      x-swagger-router-controller: Default
-  /admin/notifications/{notificationId}:
-    get:
-      summary: get a certain notification
-      description: F5- Το σύστημα θα πρέπει να ειδοποιεί τον χρήστη για νέες ειδοποιήσεις
-      operationId: getAdminNotificationById
-      parameters:
-      - name: notificationId
-        in: path
-        description: the name id of the notification
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Notification'
-        "400":
-          description: bad request
-      x-swagger-router-controller: Default
-    put:
-      summary: edit a certain notification
-      description: F5- Το σύστημα θα πρέπει να ειδοποιεί τον χρήστη για νέες ειδοποιήσεις
-      operationId: editAdminNotificationById
-      parameters:
-      - name: notificationId
-        in: path
-        description: the name id of the notification
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-      requestBody:
-        $ref: '#/components/requestBodies/NewNotification'
-      responses:
-        "200":
-          description: successful deletetion
-        "400":
-          description: bad request
-      x-swagger-router-controller: Default
-    delete:
-      summary: delete a certain notification
-      operationId: deleteAdminNotificationById
-      parameters:
-      - name: notificationId
-        in: path
-        description: the name id of the notification
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-      responses:
-        "200":
-          description: successful deletetion
-        "400":
-          description: bad request
-      x-swagger-router-controller: Default
   /admin/class/{className}/user/{userName}/grade:
     post:
       summary: upload student grades in tests
@@ -462,236 +348,6 @@ paths:
           type: string
       requestBody:
         $ref: '#/components/requestBodies/Grade'
-      responses:
-        "200":
-          description: successful deletetion
-        "400":
-          description: bad request
-      x-swagger-router-controller: Default
-  /admin/class/{className}/user/{userName}/tests:
-    post:
-      summary: upload student tests
-      description: allows the admin to upload student tests
-      operationId: adminClassClassNameUserUserNameTestsPOST
-      parameters:
-      - name: userName
-        in: path
-        description: the name of the user
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: className
-        in: path
-        description: the name of the class
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      requestBody:
-        $ref: '#/components/requestBodies/Test'
-      responses:
-        "200":
-          description: successful deletetion
-        "400":
-          description: bad request
-      x-swagger-router-controller: Default
-  /class/{className}/user/{userName}/notes:
-    post:
-      summary: upload notes
-      description: the teacher wants to upload notes
-      operationId: classClassNameUserUserNameNotesPOST
-      parameters:
-      - name: userName
-        in: path
-        description: the name of the user
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: className
-        in: path
-        description: the name of the class
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      requestBody:
-        $ref: '#/components/requestBodies/NoteUpload'
-      responses:
-        "200":
-          description: successful deletetion
-        "400":
-          description: bad request
-      x-swagger-router-controller: Default
-  /class/{className}/user/{userName}/exercises:
-    post:
-      summary: upload exercises
-      description: the teacher wants to upload exercises
-      operationId: classClassNameUserUserNameExercisesPOST
-      parameters:
-      - name: userName
-        in: path
-        description: the name of the user
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: className
-        in: path
-        description: the name of the class
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      requestBody:
-        $ref: '#/components/requestBodies/ExerciseSolution'
-      responses:
-        "200":
-          description: successful upload
-        "400":
-          description: bad request
-      x-swagger-router-controller: Default
-  /admin/user/{userName}/role:
-    put:
-      summary: edit the role of the user
-      description: the admin must be able to edit the roles of the users
-      operationId: editUserRole
-      parameters:
-      - name: userName
-        in: path
-        description: the name id of the notification
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-      requestBody:
-        $ref: '#/components/requestBodies/Role'
-      responses:
-        "200":
-          description: successful deletetion
-        "400":
-          description: bad request
-      x-swagger-router-controller: Default
-  /admin/class/{className}/schedule:
-    put:
-      summary: update the schedule
-      description: the admin must be able to edit the schedule
-      operationId: updateSchedule
-      parameters:
-      - name: className
-        in: path
-        description: the name of the class
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      requestBody:
-        $ref: '#/components/requestBodies/ScheduleItem'
-      responses:
-        "200":
-          description: successful upload
-        "400":
-          description: bad request
-      x-swagger-router-controller: Default
-  /class/{className}/user/{userName}/exercises/{exerciseId}/grade:
-    post:
-      summary: upload exercises grade
-      description: the teacher wants to upload exercises' grade
-      operationId: gradeExercise
-      parameters:
-      - name: userName
-        in: path
-        description: the name of the user
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: className
-        in: path
-        description: the name of the class
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: exerciseId
-        in: path
-        description: the name of the class
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      requestBody:
-        $ref: '#/components/requestBodies/ExerciseGrade'
-      responses:
-        "200":
-          description: successful upload
-        "400":
-          description: bad request
-      x-swagger-router-controller: Default
-  /user/{userName}/subject/{subjectName}/file:
-    post:
-      summary: upload exercises solution
-      description: the student wants to upload exercises' solutions
-      operationId: ExerciseSolution
-      parameters:
-      - name: userName
-        in: path
-        description: the name of the user
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: subjectName
-        in: path
-        description: the name of the class
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      requestBody:
-        $ref: '#/components/requestBodies/ExerciseSolution'
-      responses:
-        "200":
-          description: successful upload
-        "400":
-          description: bad request
-      x-swagger-router-controller: Default
-  /user/login:
-    put:
-      summary: Logs user into the system
-      operationId: loginUser
-      parameters:
-      - name: username
-        in: query
-        description: The user name for login
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: string
-      - name: password
-        in: query
-        description: The password for login in clear text
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: string
       responses:
         "200":
           description: successful deletetion
@@ -738,32 +394,6 @@ components:
           type: string
         permissions:
           type: object
-    ExerciseSolutionUpload:
-      type: object
-      properties:
-        subjectName:
-          type: string
-        exerciseId:
-          type: integer
-        solutionFile:
-          type: string
-          format: binary
-    ExerciseGradeUpload:
-      type: object
-      properties:
-        className:
-          type: string
-        exerciseId:
-          type: integer
-        grade:
-          type: number
-    ScheduleItemUpload:
-      type: object
-      properties:
-        className:
-          type: string
-        shceduleItem:
-          $ref: '#/components/schemas/ScheduleItemUpload_shceduleItem'
     Class:
       type: object
       properties:
@@ -776,14 +406,14 @@ components:
       example:
         className: className
         users:
-        - grade: 6.02745618307040320615897144307382404804229736328125
+        - grade: 6.027456183070403
           user:
             surname: surname
             name: name
             id: 0
             userName: userName
             email: email
-        - grade: 6.02745618307040320615897144307382404804229736328125
+        - grade: 6.027456183070403
           user:
             surname: surname
             name: name
@@ -798,7 +428,7 @@ components:
         grade:
           type: number
       example:
-        grade: 6.02745618307040320615897144307382404804229736328125
+        grade: 6.027456183070403
         user:
           surname: surname
           name: name
@@ -854,28 +484,9 @@ components:
         grade:
           type: number
       example:
-        grade: 0.80082819046101150206595775671303272247314453125
+        grade: 0.8008281904610115
         className: className
         username: username
-    Notifications:
-      type: array
-      items:
-        $ref: '#/components/schemas/Notification'
-    NewNotification:
-      type: object
-      properties:
-        title:
-          type: string
-        body:
-          type: string
-    Notification:
-      allOf:
-      - $ref: '#/components/schemas/NewNotification'
-      - type: object
-        properties:
-          id:
-            type: integer
-            format: int64
     TestUpload:
       type: object
       properties:
@@ -892,42 +503,7 @@ components:
           id:
             type: integer
             format: int64
-    NoteUpload:
-      type: object
-      properties:
-        title:
-          type: string
-        file:
-          type: string
-          format: binary
-    ScheduleItemUpload_shceduleItem:
-      type: object
-      properties:
-        title:
-          type: string
-        time:
-          type: integer
   requestBodies:
-    Role:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Role'
-    ExerciseSolution:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ExerciseSolutionUpload'
-    ExerciseGrade:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ExerciseGradeUpload'
-    ScheduleItem:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ScheduleItemUpload'
     Test:
       description: Test file
       content:
@@ -950,21 +526,14 @@ components:
             $ref: '#/components/schemas/NewMessage'
       required: true
     User:
-      description: message model
+      description: user model
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/User'
       required: true
-    NewNotification:
-      description: notification model
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/NewNotification'
-      required: true
     Grade:
-      description: notification model
+      description: grade model
       content:
         application/json:
           schema:
@@ -976,11 +545,4 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/TestUpload'
-      required: true
-    NoteUpload:
-      description: note model
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/NoteUpload'
       required: true
