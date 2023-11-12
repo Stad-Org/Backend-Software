@@ -1,0 +1,753 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "STUD API",
+        "description": "Software Engineering Course STAD application",
+        "contact": {
+            "name": "STAD Corp",
+            "email": "stadsupport@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://virtserver.swaggerhub.com/IASONAS2001/STAD/1.0.0",
+            "description": "SwaggerHub API Auto Mocking"
+        },
+        {
+            "url": "https://7fe4cb38-ad4e-4260-a616-2eb859735bc3.mock.pstmn.io"
+        },
+        {
+            "url": "http://127.0.0.1:1880/"
+        }
+    ],
+    "paths": {
+        "/admin/class": {
+            "post": {
+                "summary": "create a class",
+                "description": "the secretary must be able to create a class",
+                "operationId": "createClass",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/Class"
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful deletetion"
+                    },
+                    "400": {
+                        "description": "bad request"
+                    }
+                }
+            }
+        },
+        "/admin/class/{className}": {
+            "get": {
+                "summary": "get class info",
+                "description": "FR1 Ο καθηγητής και η γραμματεία πρέπει να μπορεί να επεξεργαστεί την τάξη",
+                "operationId": "getClassInfoAdmin",
+                "parameters": [
+                    {
+                        "name": "className",
+                        "in": "path",
+                        "description": "the name of the class",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Class"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "bad request"
+                    }
+                }
+            },
+            "put": {
+                "summary": "change class info",
+                "operationId": "putClassInfoAdmin",
+                "parameters": [
+                    {
+                        "name": "className",
+                        "in": "path",
+                        "description": "the name of the class",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/Class"
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful deletetion"
+                    },
+                    "400": {
+                        "description": "bad request"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "delete class",
+                "operationId": "deleteClass",
+                "parameters": [
+                    {
+                        "name": "className",
+                        "in": "path",
+                        "description": "the name of the class",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful deletetion"
+                    },
+                    "400": {
+                        "description": "bad request"
+                    }
+                }
+            }
+        },
+        "/user/{userName}/class/{className}": {
+            "get": {
+                "summary": "get class info",
+                "description": "FR1 Ο καθηγητής και η γραμματεία πρέπει να μπορεί να επεξεργαστεί την τάξη",
+                "operationId": "getClassInfoUser",
+                "parameters": [
+                    {
+                        "name": "userName",
+                        "in": "path",
+                        "description": "the name of the user",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "className",
+                        "in": "path",
+                        "description": "the name of the class",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Class"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "bad request"
+                    }
+                }
+            },
+            "put": {
+                "summary": "change class info",
+                "operationId": "put Class Info user",
+                "parameters": [
+                    {
+                        "name": "userName",
+                        "in": "path",
+                        "description": "the name of the user",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "className",
+                        "in": "path",
+                        "description": "the name of the class",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/Class"
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful deletetion"
+                    },
+                    "400": {
+                        "description": "bad request"
+                    }
+                }
+            }
+        },
+        "/user/{userName}/class/{className}/chat": {
+            "get": {
+                "summary": "get the chat of the classroom",
+                "description": "F2- Ο χρήστης θα πρέπει να έχει τη δυνατότητα να συνομιλήσει με τα υπόλοιπα μέλη της ‘τάξης’",
+                "operationId": "getClassChat",
+                "parameters": [
+                    {
+                        "name": "userName",
+                        "in": "path",
+                        "description": "the name of the user",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "className",
+                        "in": "path",
+                        "description": "the name of the class",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Chat"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "bad request"
+                    }
+                }
+            },
+            "post": {
+                "summary": "post a message to the classroom",
+                "operationId": "postClassMessage",
+                "parameters": [
+                    {
+                        "name": "userName",
+                        "in": "path",
+                        "description": "the name of the user",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "className",
+                        "in": "path",
+                        "description": "the name of the class",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/NewMessage"
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful deletetion"
+                    },
+                    "400": {
+                        "description": "bad request"
+                    }
+                }
+            }
+        },
+        "/user/{userName}/class/{className}/chat/{messageID}": {
+            "delete": {
+                "summary": "delete a message",
+                "operationId": "deleteMessage",
+                "parameters": [
+                    {
+                        "name": "userName",
+                        "in": "path",
+                        "description": "the name of the user",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "className",
+                        "in": "path",
+                        "description": "the name of the class",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "messageID",
+                        "in": "path",
+                        "description": "the id of the message",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful deletetion"
+                    },
+                    "400": {
+                        "description": "bad request"
+                    }
+                }
+            }
+        },
+        "/user/{userName}": {
+            "get": {
+                "summary": "get the user details",
+                "description": "FR-3 Ο χρήστης θα μπορεί να φτιάξει το προφίλ του",
+                "operationId": "getUserInfo",
+                "parameters": [
+                    {
+                        "name": "userName",
+                        "in": "path",
+                        "description": "the name of the user",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "bad request"
+                    }
+                }
+            },
+            "put": {
+                "summary": "edit the user details",
+                "operationId": "editUserInfo",
+                "parameters": [
+                    {
+                        "name": "userName",
+                        "in": "path",
+                        "description": "the name of the user",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/User"
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful deletetion"
+                    },
+                    "400": {
+                        "description": "bad request"
+                    }
+                }
+            }
+        },
+        "/user/{userName}/class/{className}/grade": {
+            "get": {
+                "summary": "get the grade of the user",
+                "description": "F4- Το σύστημα θα πρέπει να μπορεί να υπολογίσει τον μέσο όρο του μαθητή",
+                "operationId": "getUserGrade",
+                "parameters": [
+                    {
+                        "name": "userName",
+                        "in": "path",
+                        "description": "the name of the user",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "className",
+                        "in": "path",
+                        "description": "the name of the class",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Grade"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "bad request"
+                    }
+                }
+            }
+        },
+        "/admin/class/{className}/user/{userName}/grade": {
+            "post": {
+                "summary": "upload student grades in tests",
+                "operationId": "uploadUserGrade",
+                "parameters": [
+                    {
+                        "name": "userName",
+                        "in": "path",
+                        "description": "the name of the user",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "className",
+                        "in": "path",
+                        "description": "the name of the class",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/Grade"
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful deletetion"
+                    },
+                    "400": {
+                        "description": "bad request"
+                    }
+                }
+            }
+        },
+        "/admin/user": {
+            "post": {
+                "summary": "Create a new user account",
+                "operationId": "createUser",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/User"
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful deletetion"
+                    },
+                    "400": {
+                        "description": "bad request"
+                    }
+                }
+            }
+        },
+        "/admin/user/{userName}": {
+            "delete": {
+                "summary": "delete a user",
+                "operationId": "deleteUser",
+                "parameters": [
+                    {
+                        "name": "userName",
+                        "in": "path",
+                        "description": "The user name for deletetion",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful deletetion"
+                    },
+                    "400": {
+                        "description": "bad request"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Role": {
+                "type": "object",
+                "properties": {
+                    "roleName": {
+                        "type": "string"
+                    },
+                    "permissions": {
+                        "type": "object"
+                    }
+                }
+            },
+            "Class": {
+                "type": "object",
+                "properties": {
+                    "className": {
+                        "type": "string"
+                    },
+                    "users": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/EnrolledUser"
+                        }
+                    }
+                }
+            },
+            "EnrolledUser": {
+                "type": "object",
+                "properties": {
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "grade": {
+                        "type": "number"
+                    }
+                }
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "userName": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "surname": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "Chat": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/Message"
+                }
+            },
+            "Message": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/NewMessage"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "format": "int64"
+                            }
+                        }
+                    }
+                ]
+            },
+            "NewMessage": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Grade": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "className": {
+                        "type": "string"
+                    },
+                    "grade": {
+                        "type": "number"
+                    }
+                }
+            },
+            "TestUpload": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "file": {
+                        "type": "string",
+                        "format": "binary"
+                    }
+                }
+            },
+            "Test": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/TestUpload"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "format": "int64"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "requestBodies": {
+            "Test": {
+                "description": "Test file",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Test"
+                        }
+                    }
+                },
+                "required": true
+            },
+            "Class": {
+                "description": "Class model",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Class"
+                        }
+                    }
+                },
+                "required": true
+            },
+            "NewMessage": {
+                "description": "message model",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/NewMessage"
+                        }
+                    }
+                },
+                "required": true
+            },
+            "User": {
+                "description": "user model",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                },
+                "required": true
+            },
+            "Grade": {
+                "description": "grade model",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Grade"
+                        }
+                    }
+                },
+                "required": true
+            },
+            "TestUpload": {
+                "description": "test model",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/TestUpload"
+                        }
+                    }
+                },
+                "required": true
+            }
+        }
+    }
+  }
