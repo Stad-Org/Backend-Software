@@ -4,9 +4,9 @@
   "description": "Software Engineering Course STAD application",
   "main": "index.js",
   "scripts": {
-	"prestart": "npm install",
-	"start": "node index.js", 
-	"test": "echo Test & exit 0" 
+    "prestart": "npm install",
+    "start": "node index.js",
+    "test": "c8 ava"
   },
   "keywords": [
     "swagger"
@@ -17,5 +17,11 @@
     "connect": "^3.2.0",
     "js-yaml": "^3.3.0",
     "oas3-tools": "^2.2.3"
+  },
+  "devDependencies": {
+    "ava": "^5.3.1",
+    "c8": "^8.0.1",
+    "got": "^11.8.3",
+    "test-listen": "^1.1.0"
   }
 }
