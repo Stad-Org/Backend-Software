@@ -68,3 +68,5 @@ test("endpoint User", async (t)=>{
     t.is(body.userName, 'userName');
     t.is(body.email, 'email');
 })
+
+//Functions for API calls
