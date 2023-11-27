@@ -1,47 +1,10 @@
 const test = require('ava')
-
-test('my test', t => {
-    t.pass();
-    // t.fail();
-})
-
-function addNumbers(a, b){
-    if (!(typeof a === "number" && typeof b === "number")){
-        throw new Error("Bad input types")
-    }
-    return a + b
-}
-
-test("addNumbers", t => {
-    t.is(addNumbers(1,2), 3);
-    t.throws(() => addNumbers("one", "two"));
-})
-
-test("Async", async t => {
-    const res = Promise.resolve('test');
-    t.is(await res, 'test')
-})
-
-// API function testing
-const {getUserInfo} = require('../service/DefaultService.js');
-
-test("getUserInfo", async t => {
-    const res = await getUserInfo();
-    t.is(res.surname, 'surname');
-    t.is(res.name, 'name');
-    t.is(res.id, 0);
-    t.is(res.userName, 'userName');
-    t.is(res.email, 'email');
-
-})
-
-// Server testing
-
 const app = require('../index.js');
 const http = require('http');
 const listen = require('test-listen');
 const got = require('got');
 
+// Initialize server
 test.before(async (t) => {
     console.log("Creating test server")
     t.context.server = http.createServer(app);
@@ -50,6 +13,7 @@ test.before(async (t) => {
     console.log("Successfully created test server")
 })
 
+// Shutdown server
 test.after.always(async (t) => {
     console.log("Testing finished, closing test server")
     await t.context.server.close();
@@ -57,6 +21,7 @@ test.after.always(async (t) => {
 
 })
 
+// Replace this with correct endpoints
 test("endpoint User", async (t)=>{
     const {body, statusCode} = await t.context.got("user/123");
     t.is(statusCode, 200);
