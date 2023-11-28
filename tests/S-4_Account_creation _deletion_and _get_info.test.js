@@ -55,6 +55,7 @@ test("POST endpoint /admin/user", async (t) => {
 });
 
 
+// Test for Multipule:    POST    /admin/user
 test("Multipule POST endpoint /admin/user", async (t) => {
 
     const usersToCreate = [
@@ -90,7 +91,8 @@ test("Multipule POST endpoint /admin/user", async (t) => {
     }
 });
 
-// Test for:    POST    /admin/user
+// It should be a bit different but what can we do at this point
+// Test for Wrong input:    POST    /admin/user
 test("Wrong input POST endpoint /admin/user", async (t) => {
 
     const { statusCode } = await t.context.got.post("admin/user", { 
@@ -110,6 +112,28 @@ test("Wrong input POST endpoint /admin/user", async (t) => {
 
 });
 
+
+// Test for Empty input:    POST    /admin/user
+test("Empty input POST endpoint /admin/user", async (t) => {
+
+    await t.throwsAsync(
+        async () => {
+            await t.context.got.post("admin/user", { })
+        },
+        { instanceOf: t.context.got.HTTPError, message: /Response code 415/ }
+        // Or we can use this 'Response code 415 (Unsupported Media Type)'        
+    );
+
+});
+
+// // Testing a different way for Empty input:    POST    /admin/user
+// test('Fancy Empty input POST endpoint /admin/user', async t => {
+//     const error = await t.throws(  (t) => { t.context.got.post("admin/user", { }) } );
+//     console.log(error)
+//     t.is(error.message, '...');
+// });
+
+
 // Test for:    DELETE  /admin/user/{userName}
 test("DELETE endpoint /admin/user/{userName}", async (t) => {
 
@@ -121,7 +145,7 @@ test("DELETE endpoint /admin/user/{userName}", async (t) => {
    
 });
 
-// Make mulpuple request for differend users
+// Test for mulpuple: DELETE  /admin/user/{userName}
 test("Multipule DELETE endpoint /admin/user/{userName}", async (t) => {
     const usernamesToDelete = ["dummyUserName1", "dummyUserName2", "dummyUserName3"];
 
@@ -134,6 +158,18 @@ test("Multipule DELETE endpoint /admin/user/{userName}", async (t) => {
     
 });
 
+
+// Test for Empty input:    DELETE  /admin/user/{userName}
+test("Empty input DELETE endpoint /admin/user/{userName}", async (t) => {
+    const userNameToDelete = "";
+
+    await t.throwsAsync(
+        async () => {
+            await t.context.got.delete(`admin/user/${userNameToDelete}`);
+        },
+        { instanceOf: t.context.got.HTTPError, message: /Response code 405/ }
+    );
+});
 
 
 // Test for:    GET     /user/{userName}/class/{className}
