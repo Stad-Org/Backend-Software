@@ -33,7 +33,7 @@ test.after.always(async (t) => {
 
 
 
-
+// =========================== POST /admin/user =========================== //
 
 // Test for:    POST    /admin/user
 test("POST endpoint /admin/user", async (t) => {
@@ -53,7 +53,6 @@ test("POST endpoint /admin/user", async (t) => {
     t.is(statusCode, 200, "Expected status code 200 for successful post");
 
 });
-
 
 // Test for Multipule:    POST    /admin/user
 test("Multipule POST endpoint /admin/user", async (t) => {
@@ -112,7 +111,6 @@ test("Wrong input POST endpoint /admin/user", async (t) => {
 
 });
 
-
 // Test for Empty input:    POST    /admin/user
 test("Empty input POST endpoint /admin/user", async (t) => {
 
@@ -133,6 +131,8 @@ test("Empty input POST endpoint /admin/user", async (t) => {
 //     t.is(error.message, '...');
 // });
 
+
+// =========================== DELETE /admin/user/{userName} =========================== //
 
 // Test for:    DELETE  /admin/user/{userName}
 test("DELETE endpoint /admin/user/{userName}", async (t) => {
@@ -158,7 +158,6 @@ test("Multipule DELETE endpoint /admin/user/{userName}", async (t) => {
     
 });
 
-
 // Test for Empty input:    DELETE  /admin/user/{userName}
 test("Empty input DELETE endpoint /admin/user/{userName}", async (t) => {
     const userNameToDelete = "";
@@ -171,6 +170,8 @@ test("Empty input DELETE endpoint /admin/user/{userName}", async (t) => {
     );
 });
 
+
+// =========================== GET /user/{userName}/class/{className} =========================== //
 
 // Test for:    GET     /user/{userName}/class/{className}
 test("GET endpoint /user/{userName}/class/{className}", async (t) => {
@@ -206,7 +207,127 @@ test("GET endpoint /user/{userName}/class/{className}", async (t) => {
 
 });
 
-// Test for Empty input:    GET     /user/{userName}/class/{className}
+// Test for multipule usernames:    GET     /user/{userName}/class/{className}
+test("Multipule usernames GET endpoint /user/{userName}/class/{className}", async (t) => {
+    const usernames = ["userName", "userName2", "userName3", "userName4", "userName5", "userName6"];
+    const className = "className"; // Don't change that because the dummy data returns only for this className
+
+    
+    // Pre-allocate the array based on the number of usernames
+    const responses = new Array(usernames.length);
+    
+    // Iterate over each username
+    for (let i = 0; i < usernames.length; i++) {
+        // Make the GET request
+        const response = await t.context.got.get(`user/${usernames[i]}/class/${className}`);
+        
+        // Check status Code
+        t.is(response.statusCode, 200, `Expected status code 200 for user: ${usernames[i]}`);
+        
+        // Assign the response to the pre-allocated array
+        responses[i] = response;
+    }
+    
+    const body = responses[0].body;
+    // Check that the first response has the expected body
+    
+    // Make sure it has a className and it is the expected one
+    t.not(body.className, undefined, "Response should have a className property");
+    t.is(body.className, className, `Expected className to be equal with that of the request ${className}`);
+
+    // Make sure it is an array and that it has a length
+    t.true(Array.isArray(body.users), "Users should be an array");
+    t.not(body.users.length,undefined, "Expected to be able to get lenght of users array");
+
+    // Loop over all users in the array
+    for (var i = 0 ; i < body.users.length ; i++ ){
+        const dummy_user = body.users[i];
+        // Check that the struct has the proper fields  
+        t.not(dummy_user.grade,          undefined, "User should have a grade property");
+        t.not(dummy_user.user,           undefined, "User should have a user property");
+        t.not(dummy_user.user.userName,  undefined, "User should have a userName property");
+        t.not(dummy_user.user.surname,   undefined, "User should have a surname property");
+        t.not(dummy_user.user.name,      undefined, "User should have a name property");
+        t.not(dummy_user.user.id,        undefined, "User should have a id property");
+        t.not(dummy_user.user.email,     undefined, "User should have a email property");        
+    }
+
+    // Check that all responses have the same body
+    for (let i = 1; i < responses.length; i++) {
+        t.deepEqual(
+            responses[i].body,
+            responses[0].body,
+            `Expected the same body response for ${usernames[i]} as for ${usernames[0]}`
+            );
+        }
+        
+});
+
+// Test for multipule usernames and classNames:    GET     /user/{userName}/class/{className}
+test("Multipule usernames and classNames GET endpoint /user/{userName}/class/{className}", async (t) => {
+    const usernames = ["userName1", "userName2", "userName3"];
+    const classNames = ["className1", "className2", "className3"];
+    
+    // Pre-allocate the array based on the number of usernames and classNames
+    const responses = new Array(usernames.length * classNames.length);
+
+    let responseIndex = 0;
+
+    // Iterate over each username
+    for (const userName of usernames) {
+        // Iterate over each className
+        for (const className of classNames) {
+            // Make the GET request
+            const response = await t.context.got.get(`user/${userName}/class/${className}`);
+            
+            // Check status Code
+            t.is(response.statusCode, 200, `Expected status code 200 for ${userName} and ${className}`);
+
+            // Assign the response to the pre-allocated array
+            responses[responseIndex++] = response;
+
+            // Check Response body once for each className (since we check the other later against thoses ones)
+            if (userName == usernames[0]){
+
+                var body = responses[responseIndex-1].body;
+                // Check that the first response has the expected body
+                
+                // Make sure it has a className and it is the expected one
+                t.not(body.className, undefined, "Response should have a className property");
+                t.is(body.className, className, `Expected className to be equal with that of the request ${className}`);
+                
+                // Make sure it is an array and that it has a length
+                t.true(Array.isArray(body.users), "Users should be an array");
+                t.not(body.users.length,undefined, "Expected to be able to get lenght of users array");
+                
+                // Loop over all users in the array
+                for (var i = 0 ; i < body.users.length ; i++ ){
+                    const dummy_user = body.users[i];
+                    // Check that the struct has the proper fields  
+                    t.not(dummy_user.grade,          undefined, "User should have a grade property");
+                    t.not(dummy_user.user,           undefined, "User should have a user property");
+                    t.not(dummy_user.user.userName,  undefined, "User should have a userName property");
+                    t.not(dummy_user.user.surname,   undefined, "User should have a surname property");
+                    t.not(dummy_user.user.name,      undefined, "User should have a name property");
+                    t.not(dummy_user.user.id,        undefined, "User should have a id property");
+                    t.not(dummy_user.user.email,     undefined, "User should have a email property");        
+                }
+            }
+        }
+    }
+
+    // Check that all responses have the same body for each class
+    for (let i = 1; i < responses.length; i++) {
+        if(i == i%classNames.length ) {continue;}
+        t.deepEqual(
+            responses[i].body,
+            responses[i%classNames.length].body,
+            `Expected the same body response as ${usernames[i%classNames.length]} and ${classNames[i%classNames.length]} for ${usernames[Math.floor(i / classNames.length)]} and ${classNames[i % classNames.length ]}`
+        );
+    }
+});
+
+// Test for Empty className "input":    GET     /user/{userName}/class/{className}
 test("Empty className GET endpoint /user/{userName}/class/{className}", async (t) => {
     const userName = "userName"; 
     const className = ""; // Don't change that because the dummy data returns only for this className
@@ -216,11 +337,10 @@ test("Empty className GET endpoint /user/{userName}/class/{className}", async (t
         },
         { instanceOf: t.context.got.HTTPError, message: /Response code 404/ }
     );   
- 
+    
 });
-
-
-// Test for Empty input:    GET     /user/{userName}/class/{className}
+    
+// Test for Empty userName "input":    GET     /user/{userName}/class/{className}
 test("Empty userName GET endpoint /user/{userName}/class/{className}", async (t) => {
     const userName = ""; 
     const className = "className"; 
@@ -231,10 +351,10 @@ test("Empty userName GET endpoint /user/{userName}/class/{className}", async (t)
         },
         { instanceOf: t.context.got.HTTPError, message: /Response code 404/ }
     );   
- 
+    
 });
 
-// Test for Empty input:    GET     /user/{userName}/class/{className}
+// Test for Empty userName and className "input":    GET     /user/{userName}/class/{className}
 test("Empty both GET endpoint /user/{userName}/class/{className}", async (t) => {
     const userName = ""; 
     const className = ""; 
@@ -245,47 +365,5 @@ test("Empty both GET endpoint /user/{userName}/class/{className}", async (t) => 
         },
         { instanceOf: t.context.got.HTTPError, message: /Response code 404/ }
     );   
- 
-});
-
-
-
-// // Test 2 for:    GET     /user/{userName}/class/{className}
-// test("GET2 endpoint /user/{userName}/class/{className}", async (t) => {
-//     const userName = "userName"; 
-//     const className = "className"; // Don't change that because the dummy data returns only for this className
     
-//     const { body, statusCode } = await t.context.got.get(`user/${userName}/class/${className}`);
-
-//     const userName2 = "userName2"; 
-//     const { body2, statusCode2 } = await t.context.got.get(`user/${userName2}/class/${className}`);
-
-//     // Check status Code    
-//     t.is(statusCode, 200, "Expected status code 200");
-//     t.is(statusCode2, 200, "Expected status code 200");
-
-//     t.deepEqual(body2,body, "Expected same body response for all users")
-
-//     // Make sure it has a className and it is the expected one
-//     t.not(body.className, undefined, "Response should have a className property");
-//     t.is(body.className, className, `Expected className to be equal with that of the request ${className}`);
-
-//     // Make sure it is an array and that it has a length
-//     t.true(Array.isArray(body.users), "Users should be an array");
-//     t.not(body.users.length,undefined, "Expected to be able to get lenght of users array");
-
-//     // Loop over all users in the array
-//     for (var i = 0 ; i < body.users.length ; i++ ){
-//         const dummy_user = body.users[i];
-//         // Check that the struct has the proper fields  
-//         t.not(dummy_user.grade,          undefined, "User should have a grade property");
-//         t.not(dummy_user.user,           undefined, "User should have a user property");
-//         t.not(dummy_user.user.userName,  undefined, "User should have a userName property");
-//         t.not(dummy_user.user.surname,   undefined, "User should have a surname property");
-//         t.not(dummy_user.user.name,      undefined, "User should have a name property");
-//         t.not(dummy_user.user.id,        undefined, "User should have a id property");
-//         t.not(dummy_user.user.email,     undefined, "User should have a email property");
-        
-//     }
-
-// });
+});
