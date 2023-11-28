@@ -1,3 +1,13 @@
+
+
+// This file contains tests for the following
+// API :
+//      POST    /admin/user
+//      DELETE  /admin/user/{userName}
+//      GET     /user/{userName}/class/{className}
+
+
+
 const test = require('ava')
 const app = require('../index.js');
 const http = require('http');
@@ -23,16 +33,9 @@ test.after.always(async (t) => {
 
 
 
-// test('my test Nick', t => {
-//     t.pass();
-//     // t.fail();
-// })
 
-// API :
-//      POST    /admin/user
-//      DELETE  /admin/user/{userName}
-//      GET     /user/{userName}/class/{className}
 
+// Test for:    POST    /admin/user
 test("POST endpoint /admin/user", async (t) => {
 
     const { statusCode } = await t.context.got.post("admin/user", {
@@ -46,18 +49,54 @@ test("POST endpoint /admin/user", async (t) => {
         }
     });
 
-    // Make sure it was succefull
+    // Check status Code 
     t.is(statusCode, 200, "Expected status code 200 for successful post");
 
 });
 
 
-
+// Test for:    DELETE  /admin/user/{userName}
 test("DELETE endpoint /admin/user/{userName}", async (t) => {
 
     const userNameToDelete = "dummyUserName";     
     const { statusCode } = await t.context.got.delete(`admin/user/${userNameToDelete}`);
 
+    // Check status Code 
     t.is(statusCode, 200, "Expected status code 200 for successful deletion");
    
+});
+
+
+// Test for:    GET     /user/{userName}/class/{className}
+test("GET endpoint /user/{userName}/class/{className}", async (t) => {
+    const userName = "userName"; 
+    const className = "className"; // Don't change that because the dummy data returns only for this className
+
+    const { body, statusCode } = await t.context.got.get(`user/${userName}/class/${className}`);
+
+    // Check status Code    
+    t.is(statusCode, 200, "Expected status code 200");
+
+    // Make sure it has a className and it is the expected one
+    t.not(body.className, undefined, "Response should have a className property");
+    t.is(body.className, className, `Expected className to be equal with that of the request ${className}`);
+
+    // Make sure it is an array and that it has a length
+    t.true(Array.isArray(body.users), "Users should be an array");
+    t.not(body.users.length,undefined, "Expected to be able to get lenght of users array");
+
+    // Loop over all users in the array
+    for (var i = 0 ; i < body.users.length ; i++ ){
+        const dummy_user = body.users[i];
+        // Check that the struct has the proper fields  
+        t.not(dummy_user.grade,          undefined, "User should have a grade property");
+        t.not(dummy_user.user,           undefined, "User should have a user property");
+        t.not(dummy_user.user.userName,  undefined, "User should have a userName property");
+        t.not(dummy_user.user.surname,   undefined, "User should have a surname property");
+        t.not(dummy_user.user.name,      undefined, "User should have a name property");
+        t.not(dummy_user.user.id,        undefined, "User should have a id property");
+        t.not(dummy_user.user.email,     undefined, "User should have a email property");
+        
+    }
+
 });
