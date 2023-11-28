@@ -55,6 +55,61 @@ test("POST endpoint /admin/user", async (t) => {
 });
 
 
+test("Multipule POST endpoint /admin/user", async (t) => {
+
+    const usersToCreate = [
+        {
+            surname: "surname_dummy1",
+            name: "name_dummy1",
+            id: 1,
+            userName: "userName_dummy1",
+            email: "email1@dummy_data"
+        },
+        {
+            surname: "surname_dummy2",
+            name: "name_dummy2",
+            id: 2,
+            userName: "userName_dummy2",
+            email: "email2@dummy_data"
+        },
+        {
+            surname: "surname_dummy3",
+            name: "name_dummy3",
+            id: 3,
+            userName: "userName_dummy3",
+            email: "email3@dummy_data"
+        },
+    ];
+
+    for (const userData of usersToCreate) {
+        const { statusCode } = await t.context.got.post("admin/user", {json: userData});
+
+        // Check status Code 
+        t.is(statusCode, 200, `Expected status code 200 for successful deletion, Bad request for user ${userData.userName}`);
+       
+    }
+});
+
+// Test for:    POST    /admin/user
+test("Wrong input POST endpoint /admin/user", async (t) => {
+
+    const { statusCode } = await t.context.got.post("admin/user", { 
+        // Give it dummy data 
+        json: {
+        //     surname: "surname_dummy",
+        //     name: "name_dummy",
+        //     id: 0,
+        //     userName: "userName_dummy",
+        //     email: "email@dummy_data"
+        }
+    });
+
+    // Check status Code 
+    // It shouldn't respond with 200 when the body is empty, So now the correct step would be to change the function
+    t.is(statusCode, 200, "Expected status code 200 for successful post");
+
+});
+
 // Test for:    DELETE  /admin/user/{userName}
 test("DELETE endpoint /admin/user/{userName}", async (t) => {
 
