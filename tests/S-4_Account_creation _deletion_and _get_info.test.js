@@ -206,6 +206,49 @@ test("GET endpoint /user/{userName}/class/{className}", async (t) => {
 
 });
 
+// Test for Empty input:    GET     /user/{userName}/class/{className}
+test("Empty className GET endpoint /user/{userName}/class/{className}", async (t) => {
+    const userName = "userName"; 
+    const className = ""; // Don't change that because the dummy data returns only for this className
+    await t.throwsAsync(
+        async () => {
+            await t.context.got.get(`user/${userName}/class/${className}`);
+        },
+        { instanceOf: t.context.got.HTTPError, message: /Response code 404/ }
+    );   
+ 
+});
+
+
+// Test for Empty input:    GET     /user/{userName}/class/{className}
+test("Empty userName GET endpoint /user/{userName}/class/{className}", async (t) => {
+    const userName = ""; 
+    const className = "className"; 
+
+    await t.throwsAsync(
+        async () => {
+            await t.context.got.get(`user/${userName}/class/${className}`);
+        },
+        { instanceOf: t.context.got.HTTPError, message: /Response code 404/ }
+    );   
+ 
+});
+
+// Test for Empty input:    GET     /user/{userName}/class/{className}
+test("Empty both GET endpoint /user/{userName}/class/{className}", async (t) => {
+    const userName = ""; 
+    const className = ""; 
+    
+    await t.throwsAsync(
+        async () => {
+            await t.context.got.get(`user/${userName}/class/${className}`);
+        },
+        { instanceOf: t.context.got.HTTPError, message: /Response code 404/ }
+    );   
+ 
+});
+
+
 
 // // Test 2 for:    GET     /user/{userName}/class/{className}
 // test("GET2 endpoint /user/{userName}/class/{className}", async (t) => {
