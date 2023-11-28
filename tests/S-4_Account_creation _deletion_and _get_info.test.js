@@ -100,3 +100,44 @@ test("GET endpoint /user/{userName}/class/{className}", async (t) => {
     }
 
 });
+
+
+// Test 2 for:    GET     /user/{userName}/class/{className}
+test("GET2 endpoint /user/{userName}/class/{className}", async (t) => {
+    const userName = "userName"; 
+    const className = "className"; // Don't change that because the dummy data returns only for this className
+    
+    const { body, statusCode } = await t.context.got.get(`user/${userName}/class/${className}`);
+
+    const userName2 = "userName2"; 
+    const { body2, statusCode2 } = await t.context.got.get(`user/${userName2}/class/${className}`);
+
+    // Check status Code    
+    t.is(statusCode, 200, "Expected status code 200");
+    t.is(statusCode2, 200, "Expected status code 200");
+
+    t.deepEqual(body2,body, "Expected same body response for all users")
+
+    // Make sure it has a className and it is the expected one
+    t.not(body.className, undefined, "Response should have a className property");
+    t.is(body.className, className, `Expected className to be equal with that of the request ${className}`);
+
+    // Make sure it is an array and that it has a length
+    t.true(Array.isArray(body.users), "Users should be an array");
+    t.not(body.users.length,undefined, "Expected to be able to get lenght of users array");
+
+    // Loop over all users in the array
+    for (var i = 0 ; i < body.users.length ; i++ ){
+        const dummy_user = body.users[i];
+        // Check that the struct has the proper fields  
+        t.not(dummy_user.grade,          undefined, "User should have a grade property");
+        t.not(dummy_user.user,           undefined, "User should have a user property");
+        t.not(dummy_user.user.userName,  undefined, "User should have a userName property");
+        t.not(dummy_user.user.surname,   undefined, "User should have a surname property");
+        t.not(dummy_user.user.name,      undefined, "User should have a name property");
+        t.not(dummy_user.user.id,        undefined, "User should have a id property");
+        t.not(dummy_user.user.email,     undefined, "User should have a email property");
+        
+    }
+
+});
