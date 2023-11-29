@@ -312,7 +312,7 @@ test("Multiple usernames and classNames GET endpoint /user/{userName}/class/{cla
                 t.deepEqual(
                     response.body,
                     expected_response.body,
-                    `Expected the same body response as ${usernames[0]} and ${className} for ${userame} and ${className}`
+                    `Expected the same body response as ${usernames[0]} and ${className} for ${userName} and ${className}`
                 );
             }
 
