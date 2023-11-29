@@ -54,8 +54,8 @@ test("POST endpoint /admin/user", async (t) => {
 
 });
 
-// Test for Multipule:    POST    /admin/user
-test("Multipule POST endpoint /admin/user", async (t) => {
+// Test for Multiple:    POST    /admin/user
+test("Multiple POST endpoint /admin/user", async (t) => {
 
     const usersToCreate = [
         {
@@ -146,7 +146,7 @@ test("DELETE endpoint /admin/user/{userName}", async (t) => {
 });
 
 // Test for mulpuple: DELETE  /admin/user/{userName}
-test("Multipule DELETE endpoint /admin/user/{userName}", async (t) => {
+test("Multiple DELETE endpoint /admin/user/{userName}", async (t) => {
     const usernamesToDelete = ["dummyUserName1", "dummyUserName2", "dummyUserName3"];
 
     for (const userNameToDelete of usernamesToDelete) {
@@ -207,8 +207,8 @@ test("GET endpoint /user/{userName}/class/{className}", async (t) => {
 
 });
 
-// Test for multipule usernames:    GET     /user/{userName}/class/{className}
-test("Multipule usernames GET endpoint /user/{userName}/class/{className}", async (t) => {
+// Test for Multiple usernames:    GET     /user/{userName}/class/{className}
+test("Multiple usernames GET endpoint /user/{userName}/class/{className}", async (t) => {
     const usernames = ["userName", "userName2", "userName3", "userName4", "userName5", "userName6"];
     const className = "className"; // Don't change that because the dummy data returns only for this className
 
@@ -263,33 +263,28 @@ test("Multipule usernames GET endpoint /user/{userName}/class/{className}", asyn
         
 });
 
-// Test for multipule usernames and classNames:    GET     /user/{userName}/class/{className}
-test("Multipule usernames and classNames GET endpoint /user/{userName}/class/{className}", async (t) => {
+// Test for Multiple usernames and classNames:    GET     /user/{userName}/class/{className}
+test("Multiple usernames and classNames GET endpoint /user/{userName}/class/{className}", async (t) => {
     const usernames = ["userName1", "userName2", "userName3"];
     const classNames = ["className1", "className2", "className3"];
     
-    // Pre-allocate the array based on the number of usernames and classNames
-    const responses = new Array(usernames.length * classNames.length);
-
-    let responseIndex = 0;
-
-    // Iterate over each username
-    for (const userName of usernames) {
-        // Iterate over each className
-        for (const className of classNames) {
+    // Iterate over each className
+    for (const className of classNames) {
+        // Iterate over each username
+        var expected_response ;
+        for (const userName of usernames) {
             // Make the GET request
             const response = await t.context.got.get(`user/${userName}/class/${className}`);
             
             // Check status Code
             t.is(response.statusCode, 200, `Expected status code 200 for ${userName} and ${className}`);
-
-            // Assign the response to the pre-allocated array
-            responses[responseIndex++] = response;
-
+             
+            
             // Check Response body once for each className (since we check the other later against thoses ones)
             if (userName == usernames[0]){
+                expected_response = response ; 
 
-                var body = responses[responseIndex-1].body;
+                var body = response.body;
                 // Check that the first response has the expected body
                 
                 // Make sure it has a className and it is the expected one
@@ -313,18 +308,17 @@ test("Multipule usernames and classNames GET endpoint /user/{userName}/class/{cl
                     t.not(dummy_user.user.email,     undefined, "User should have a email property");        
                 }
             }
+            else{
+                t.deepEqual(
+                    response.body,
+                    expected_response.body,
+                    `Expected the same body response as ${usernames[0]} and ${className} for ${userame} and ${className}`
+                );
+            }
+
         }
     }
 
-    // Check that all responses have the same body for each class
-    for (let i = 1; i < responses.length; i++) {
-        if(i == i%classNames.length ) {continue;}
-        t.deepEqual(
-            responses[i].body,
-            responses[i%classNames.length].body,
-            `Expected the same body response as ${usernames[i%classNames.length]} and ${classNames[i%classNames.length]} for ${usernames[Math.floor(i / classNames.length)]} and ${classNames[i % classNames.length ]}`
-        );
-    }
 });
 
 // Test for Empty className "input":    GET     /user/{userName}/class/{className}
