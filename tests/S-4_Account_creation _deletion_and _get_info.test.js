@@ -173,6 +173,35 @@ test("Empty input DELETE endpoint /admin/user/{userName}", async (t) => {
 
 // =========================== GET /user/{userName}/class/{className} =========================== //
 
+const testValidClass = (t, body , className ) => {
+    
+    // Make sure it has a className and it is the expected one
+    t.not(body.className, undefined, "Response should have a className property");
+    t.is(body.className, className, `Expected className to be equal with that of the request ${className}`);
+    
+    // Make sure it is an array and that it has a length
+    t.true(Array.isArray(body.users), "Users should be an array");
+    t.not(body.users.length,undefined, "Expected to be able to get lenght of users array");
+    
+    // Loop over all users in the array
+    for (const user of body.users){
+        // Check that the struct has the proper fields  
+        testValidUser(t , user );                    
+    }
+}
+
+const testValidUser = (t , dummy_user) => {        
+    // Check that the struct has the proper fields  
+    t.not(dummy_user.grade,          undefined, "User should have a grade property");
+    t.not(dummy_user.user,           undefined, "User should have a user property");
+    t.not(dummy_user.user.userName,  undefined, "User should have a userName property");
+    t.not(dummy_user.user.surname,   undefined, "User should have a surname property");
+    t.not(dummy_user.user.name,      undefined, "User should have a name property");
+    t.not(dummy_user.user.id,        undefined, "User should have a id property");
+    t.not(dummy_user.user.email,     undefined, "User should have a email property");
+
+}
+
 // Test for:    GET     /user/{userName}/class/{className}
 test("GET endpoint /user/{userName}/class/{className}", async (t) => {
     const userName = "userName"; 
@@ -183,27 +212,7 @@ test("GET endpoint /user/{userName}/class/{className}", async (t) => {
     // Check status Code    
     t.is(statusCode, 200, "Expected status code 200");
 
-    // Make sure it has a className and it is the expected one
-    t.not(body.className, undefined, "Response should have a className property");
-    t.is(body.className, className, `Expected className to be equal with that of the request ${className}`);
-
-    // Make sure it is an array and that it has a length
-    t.true(Array.isArray(body.users), "Users should be an array");
-    t.not(body.users.length,undefined, "Expected to be able to get lenght of users array");
-
-    // Loop over all users in the array
-    for (var i = 0 ; i < body.users.length ; i++ ){
-        const dummy_user = body.users[i];
-        // Check that the struct has the proper fields  
-        t.not(dummy_user.grade,          undefined, "User should have a grade property");
-        t.not(dummy_user.user,           undefined, "User should have a user property");
-        t.not(dummy_user.user.userName,  undefined, "User should have a userName property");
-        t.not(dummy_user.user.surname,   undefined, "User should have a surname property");
-        t.not(dummy_user.user.name,      undefined, "User should have a name property");
-        t.not(dummy_user.user.id,        undefined, "User should have a id property");
-        t.not(dummy_user.user.email,     undefined, "User should have a email property");
-        
-    }
+    testValidClass(t, body, className);
 
 });
 
@@ -228,30 +237,8 @@ test("Multiple usernames GET endpoint /user/{userName}/class/{className}", async
         responses[i] = response;
     }
     
-    const body = responses[0].body;
-    // Check that the first response has the expected body
+    testValidClass(t, responses[0].body , className);
     
-    // Make sure it has a className and it is the expected one
-    t.not(body.className, undefined, "Response should have a className property");
-    t.is(body.className, className, `Expected className to be equal with that of the request ${className}`);
-
-    // Make sure it is an array and that it has a length
-    t.true(Array.isArray(body.users), "Users should be an array");
-    t.not(body.users.length,undefined, "Expected to be able to get lenght of users array");
-
-    // Loop over all users in the array
-    for (var i = 0 ; i < body.users.length ; i++ ){
-        const dummy_user = body.users[i];
-        // Check that the struct has the proper fields  
-        t.not(dummy_user.grade,          undefined, "User should have a grade property");
-        t.not(dummy_user.user,           undefined, "User should have a user property");
-        t.not(dummy_user.user.userName,  undefined, "User should have a userName property");
-        t.not(dummy_user.user.surname,   undefined, "User should have a surname property");
-        t.not(dummy_user.user.name,      undefined, "User should have a name property");
-        t.not(dummy_user.user.id,        undefined, "User should have a id property");
-        t.not(dummy_user.user.email,     undefined, "User should have a email property");        
-    }
-
     // Check that all responses have the same body
     for (let i = 1; i < responses.length; i++) {
         t.deepEqual(
@@ -277,36 +264,12 @@ test("Multiple usernames and classNames GET endpoint /user/{userName}/class/{cla
             const response = await t.context.got.get(`user/${userName}/class/${className}`);
             
             // Check status Code
-            t.is(response.statusCode, 200, `Expected status code 200 for ${userName} and ${className}`);
-             
+            t.is(response.statusCode, 200, `Expected status code 200 for ${userName} and ${className}`);             
             
             // Check Response body once for each className (since we check the other later against thoses ones)
             if (userName == usernames[0]){
                 expected_response = response ; 
-
-                var body = response.body;
-                // Check that the first response has the expected body
-                
-                // Make sure it has a className and it is the expected one
-                t.not(body.className, undefined, "Response should have a className property");
-                t.is(body.className, className, `Expected className to be equal with that of the request ${className}`);
-                
-                // Make sure it is an array and that it has a length
-                t.true(Array.isArray(body.users), "Users should be an array");
-                t.not(body.users.length,undefined, "Expected to be able to get lenght of users array");
-                
-                // Loop over all users in the array
-                for (var i = 0 ; i < body.users.length ; i++ ){
-                    const dummy_user = body.users[i];
-                    // Check that the struct has the proper fields  
-                    t.not(dummy_user.grade,          undefined, "User should have a grade property");
-                    t.not(dummy_user.user,           undefined, "User should have a user property");
-                    t.not(dummy_user.user.userName,  undefined, "User should have a userName property");
-                    t.not(dummy_user.user.surname,   undefined, "User should have a surname property");
-                    t.not(dummy_user.user.name,      undefined, "User should have a name property");
-                    t.not(dummy_user.user.id,        undefined, "User should have a id property");
-                    t.not(dummy_user.user.email,     undefined, "User should have a email property");        
-                }
+                testValidClass(t, response.body, className);
             }
             else{
                 t.deepEqual(
