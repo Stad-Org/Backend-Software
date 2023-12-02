@@ -10,6 +10,11 @@ const http = require('http')
 const listen = require('test-listen')
 const got = require('got')
 
+// This is needed to test each function individually 
+const onlyFunc = require('../service/DefaultService.js');
+// onlyFunc.createUser()
+// onlyFunc.deleteUser()
+
 // Initialize server
 test.before(async (t) => {
   console.log('Creating test server')
@@ -27,6 +32,24 @@ test.after.always(async (t) => {
 })
 
 // =========================== POST /admin/user =========================== //
+
+// Test the function "createUser" that gets called when the endpoint is used
+test('createUser resolves when called with a user model', async (t) => {
+  
+  const userModel = {
+    surname: 'surname_dummy',
+    name: 'name_dummy',
+    id: 0,
+    userName: 'userName_dummy',
+    email: 'email@dummy_data'
+  };
+
+  // Check that the function does NOT throw an error
+  await t.notThrowsAsync(async () => {
+    await onlyFunc.createUser(userModel);
+  });
+
+});
 
 // Test for:    POST    /admin/user
 test('POST endpoint /admin/user', async (t) => {
@@ -118,6 +141,17 @@ test('Empty input POST endpoint /admin/user', async (t) => {
 
 // =========================== DELETE /admin/user/{userName} =========================== //
 
+
+// Test the function "deleteUser" that gets called when the endpoint is used
+test('deleteUser resolves when called with a user name', async (t) => {  
+  const userNameToDelete = 'exampleUserName';
+
+  await t.notThrowsAsync(async () => {
+    await onlyFunc.deleteUser(userNameToDelete);
+  });
+
+});
+
 // Test for:    DELETE  /admin/user/{userName}
 test('DELETE endpoint /admin/user/{userName}', async (t) => {
   const userNameToDelete = 'dummyUserName'
@@ -152,6 +186,9 @@ test('Empty input DELETE endpoint /admin/user/{userName}', async (t) => {
 })
 
 // =========================== GET /user/{userName}/class/{className} =========================== //
+
+
+// onlyFunc.getClassInfoUser
 
 const testValidClass = (t, body, className) => {
   // Make sure it has a className and it is the expected one
