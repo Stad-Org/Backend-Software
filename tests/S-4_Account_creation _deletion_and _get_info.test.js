@@ -188,7 +188,48 @@ test('Empty input DELETE endpoint /admin/user/{userName}', async (t) => {
 // =========================== GET /user/{userName}/class/{className} =========================== //
 
 
-// onlyFunc.getClassInfoUser
+// Test the function "getClassInfoUser" that gets called when the endpoint is used
+test('getClassInfoUser resolves when called with a user name and className', async (t) => {
+  const userName = 'userName'
+  const className = 'className' 
+  
+  const body = await onlyFunc.getClassInfoUser( userName , className );
+    
+  testValidClass(t, body, className)
+
+})
+
+// Test the function "getClassInfoUser" for multiple inputs that gets called when the endpoint is used
+test('Multiple getClassInfoUser resolves when called with a user name and className', async (t) => {
+
+  const usernames = ['userName1', 'userName2', 'userName3']
+  const classNames = ['className1', 'className2', 'className3']
+  
+  // Iterate over each className
+  for (const className of classNames) {
+    // Iterate over each username
+    let expectedResponse
+    for (const userName of usernames) {
+      // Call the function      
+      const response = await onlyFunc.getClassInfoUser( userName , className );
+      
+      // Check Response once for each className (since we check the other later against thoses ones)
+      if (userName === usernames[0]) {
+        expectedResponse = response
+        testValidClass(t, response, className)
+      } else {
+        t.deepEqual(
+          response,
+          expectedResponse,
+                    `Expected the same response as ${usernames[0]} and ${className} for ${userName} and ${className}`
+        )
+      }
+    }
+  }
+
+})
+
+
 
 const testValidClass = (t, body, className) => {
   // Make sure it has a className and it is the expected one
