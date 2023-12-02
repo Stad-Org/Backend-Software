@@ -14,6 +14,7 @@ const got = require('got')
 const onlyFunc = require('../service/DefaultService.js');
 // onlyFunc.createUser()
 // onlyFunc.deleteUser()
+// onlyFunc.getClassInfoUser
 
 // Initialize server
 test.before(async (t) => {
@@ -35,7 +36,7 @@ test.after.always(async (t) => {
 
 // Test the function "createUser" that gets called when the endpoint is used
 test('createUser resolves when called with a user model', async (t) => {
-  
+  // Prepare data
   const userModel = {
     surname: 'surname_dummy',
     name: 'name_dummy',
@@ -70,6 +71,7 @@ test('POST endpoint /admin/user', async (t) => {
 
 // Test for Multiple:    POST    /admin/user
 test('Multiple POST endpoint /admin/user', async (t) => {
+  // Prepare data
   const usersToCreate = [
     {
       surname: 'surname_dummy1',
@@ -201,7 +203,7 @@ test('getClassInfoUser resolves when called with a user name and className', asy
 
 // Test the function "getClassInfoUser" for multiple inputs that gets called when the endpoint is used
 test('Multiple getClassInfoUser resolves when called with a user name and className', async (t) => {
-
+  // The data to test for (all possible combinations)
   const usernames = ['userName1', 'userName2', 'userName3']
   const classNames = ['className1', 'className2', 'className3']
   
@@ -247,8 +249,8 @@ const testValidClass = (t, body, className) => {
   }
 }
 
+// Checks that the user has the proper fields
 const testValidUser = (t, user) => {
-  // Check that the struct has the proper fields
   t.not(user.grade, undefined, 'User should have a grade property')
   t.not(user.user, undefined, 'User should have a user property')
   t.not(user.user.userName, undefined, 'User should have a userName property')
@@ -261,8 +263,8 @@ const testValidUser = (t, user) => {
 // Test for:    GET     /user/{userName}/class/{className}
 test('GET endpoint /user/{userName}/class/{className}', async (t) => {
   const userName = 'userName'
-  const className = 'className' // Don't change that because the dummy data returns only for this className
-
+  const className = 'className' 
+  
   const { body, statusCode } = await t.context.got.get(`user/${userName}/class/${className}`)
 
   // Check status Code
