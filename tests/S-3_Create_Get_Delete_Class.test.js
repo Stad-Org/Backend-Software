@@ -38,15 +38,40 @@ test.after.always(async (t) => {
  * Get admin class info
  */
 test("GET /admin/class/{className} returns the data of the class", async (t) => {
-  const { statusCode, body } = await t.context.got("admin/class/className");
+  const className = "maths";
+  const { statusCode, body } = await t.context.got(`admin/class/${className}`);
 
-  t.plan(6);
-  t.is(statusCode, 200);
-  console.log(body);
-  t.is(body.className, "className");
-  t.is(body.users[0].grade, 6.027456183070403);
-  t.is(body.users[1].user.id, 0);
+  t.plan(11 + body.users.length);
 
-  t.not(body.users[1].user.name, "Jason");
-  t.not(body.users[0].grade, 12);
+  t.is(statusCode, 200, "status code should be 200");
+  t.truthy(body, "checks if the body has any values");
+
+  t.is(
+    body.className,
+    className,
+    "the class name should be the same of the request"
+  );
+
+  t.true(Array.isArray(body.users), "it should be an array");
+
+  t.is(
+    typeof body.users[0].grade,
+    "number",
+    "The type of the grade should be number"
+  );
+  t.is(body.users[1].user.id, 1);
+
+  t.not(body.users[1].user.name, "Jason", "the actual value is username");
+  t.not(body.users[0].grade, 12, "less than 10");
+  t.not(body.users[0].user.email, undefined);
+  t.is(typeof body.users[0].user.name, "string", "the name should a string");
+  t.is(
+    typeof body.users[0].user.surname,
+    "string",
+    "the surname should a string"
+  );
+
+  for (let i = 0; i < body.users.length; i++) {
+    t.is(body.users[i].user.id, i, "the ids should increment");
+  }
 });

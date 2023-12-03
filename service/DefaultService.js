@@ -110,7 +110,7 @@ exports.getClassInfoAdmin = function (className) {
       className: `${className}`,
       users: [
         {
-          grade: 6.027456183070403,
+          grade: 7,
           user: {
             surname: "surname",
             name: "name",
@@ -120,11 +120,11 @@ exports.getClassInfoAdmin = function (className) {
           },
         },
         {
-          grade: 6.027456183070403,
+          grade: 8,
           user: {
             surname: "surname",
             name: "name",
-            id: 0,
+            id: 1,
             userName: "userName",
             email: "email",
           },
