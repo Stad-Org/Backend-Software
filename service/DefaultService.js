@@ -1,5 +1,4 @@
-'use strict';
-
+"use strict";
 
 /**
  * create a class
@@ -8,12 +7,11 @@
  * body Class Class model
  * no response value expected for this operation
  **/
-exports.createClass = function(body) {
-  return new Promise(function(resolve, reject) {
+exports.createClass = function (body) {
+  return new Promise(function (resolve, reject) {
     resolve();
   });
-}
-
+};
 
 /**
  * Create a new user account
@@ -21,12 +19,11 @@ exports.createClass = function(body) {
  * body User user model
  * no response value expected for this operation
  **/
-exports.createUser = function(body) {
-  return new Promise(function(resolve, reject) {
+exports.createUser = function (body) {
+  return new Promise(function (resolve, reject) {
     resolve();
   });
-}
-
+};
 
 /**
  * delete class
@@ -34,12 +31,11 @@ exports.createUser = function(body) {
  * className String the name of the class
  * no response value expected for this operation
  **/
-exports.deleteClass = function(className) {
-  return new Promise(function(resolve, reject) {
+exports.deleteClass = function (className) {
+  return new Promise(function (resolve, reject) {
     resolve();
   });
-}
-
+};
 
 /**
  * delete a message
@@ -49,12 +45,11 @@ exports.deleteClass = function(className) {
  * messageID String the id of the message
  * no response value expected for this operation
  **/
-exports.deleteMessage = function(userName,className,messageID) {
-  return new Promise(function(resolve, reject) {
+exports.deleteMessage = function (userName, className, messageID) {
+  return new Promise(function (resolve, reject) {
     resolve();
   });
-}
-
+};
 
 /**
  * delete a user
@@ -62,12 +57,11 @@ exports.deleteMessage = function(userName,className,messageID) {
  * userName String The user name for deletetion
  * no response value expected for this operation
  **/
-exports.deleteUser = function(userName) {
-  return new Promise(function(resolve, reject) {
+exports.deleteUser = function (userName) {
+  return new Promise(function (resolve, reject) {
     resolve();
   });
-}
-
+};
 
 /**
  * edit the user details
@@ -76,12 +70,11 @@ exports.deleteUser = function(userName) {
  * userName String the name of the user
  * no response value expected for this operation
  **/
-exports.editUserInfo = function(body,userName) {
-  return new Promise(function(resolve, reject) {
+exports.editUserInfo = function (body, userName) {
+  return new Promise(function (resolve, reject) {
     resolve();
   });
-}
-
+};
 
 /**
  * get the chat of the classroom
@@ -91,18 +84,17 @@ exports.editUserInfo = function(body,userName) {
  * className String the name of the class
  * returns Chat
  **/
-exports.getClassChat = function(userName,className) {
-  return new Promise(function(resolve, reject) {
+exports.getClassChat = function (userName, className) {
+  return new Promise(function (resolve, reject) {
     var examples = {};
-    examples['application/json'] = [ "", "" ];
+    examples["application/json"] = ["", ""];
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
     }
   });
-}
-
+};
 
 /**
  * get class info
@@ -111,39 +103,41 @@ exports.getClassChat = function(userName,className) {
  * className String the name of the class
  * returns Class
  **/
-exports.getClassInfoAdmin = function(className) {
-  return new Promise(function(resolve, reject) {
+exports.getClassInfoAdmin = function (className) {
+  return new Promise(function (resolve, reject) {
     var examples = {};
-    examples['application/json'] = {
-  "className" : "className",
-  "users" : [ {
-    "grade" : 6.027456183070403,
-    "user" : {
-      "surname" : "surname",
-      "name" : "name",
-      "id" : 0,
-      "userName" : "userName",
-      "email" : "email"
-    }
-  }, {
-    "grade" : 6.027456183070403,
-    "user" : {
-      "surname" : "surname",
-      "name" : "name",
-      "id" : 0,
-      "userName" : "userName",
-      "email" : "email"
-    }
-  } ]
-};
+    examples["application/json"] = {
+      className: `${className}`,
+      users: [
+        {
+          grade: 6.027456183070403,
+          user: {
+            surname: "surname",
+            name: "name",
+            id: 0,
+            userName: "userName",
+            email: "email",
+          },
+        },
+        {
+          grade: 6.027456183070403,
+          user: {
+            surname: "surname",
+            name: "name",
+            id: 0,
+            userName: "userName",
+            email: "email",
+          },
+        },
+      ],
+    };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
     }
   });
-}
-
+};
 
 /**
  * get class info
@@ -153,39 +147,41 @@ exports.getClassInfoAdmin = function(className) {
  * className String the name of the class
  * returns Class
  **/
-exports.getClassInfoUser = function(userName,className) {
-  return new Promise(function(resolve, reject) {
+exports.getClassInfoUser = function (userName, className) {
+  return new Promise(function (resolve, reject) {
     var examples = {};
-    examples['application/json'] = {
-  "className" : "className",
-  "users" : [ {
-    "grade" : 6.027456183070403,
-    "user" : {
-      "surname" : "surname",
-      "name" : "name",
-      "id" : 0,
-      "userName" : "userName",
-      "email" : "email"
-    }
-  }, {
-    "grade" : 6.027456183070403,
-    "user" : {
-      "surname" : "surname",
-      "name" : "name",
-      "id" : 0,
-      "userName" : "userName",
-      "email" : "email"
-    }
-  } ]
-};
+    examples["application/json"] = {
+      className: "className",
+      users: [
+        {
+          grade: 6.027456183070403,
+          user: {
+            surname: "surname",
+            name: "name",
+            id: 0,
+            userName: "userName",
+            email: "email",
+          },
+        },
+        {
+          grade: 6.027456183070403,
+          user: {
+            surname: "surname",
+            name: "name",
+            id: 0,
+            userName: "userName",
+            email: "email",
+          },
+        },
+      ],
+    };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
     }
   });
-}
-
+};
 
 /**
  * get the grade of the user
@@ -195,22 +191,21 @@ exports.getClassInfoUser = function(userName,className) {
  * className String the name of the class
  * returns Grade
  **/
-exports.getUserGrade = function(userName,className) {
-  return new Promise(function(resolve, reject) {
+exports.getUserGrade = function (userName, className) {
+  return new Promise(function (resolve, reject) {
     var examples = {};
-    examples['application/json'] = {
-  "grade" : 0.8008281904610115,
-  "className" : "className",
-  "username" : "username"
-};
+    examples["application/json"] = {
+      grade: 0.8008281904610115,
+      className: "className",
+      username: "username",
+    };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
     }
   });
-}
-
+};
 
 /**
  * get the user details
@@ -219,24 +214,23 @@ exports.getUserGrade = function(userName,className) {
  * userName String the name of the user
  * returns User
  **/
-exports.getUserInfo = function(userName) {
-  return new Promise(function(resolve, reject) {
+exports.getUserInfo = function (userName) {
+  return new Promise(function (resolve, reject) {
     var examples = {};
-    examples['application/json'] = {
-  "surname" : "surname",
-  "name" : "name",
-  "id" : 0,
-  "userName" : "userName",
-  "email" : "email"
-};
+    examples["application/json"] = {
+      surname: "surname",
+      name: "name",
+      id: 0,
+      userName: "userName",
+      email: "email",
+    };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
     }
   });
-}
-
+};
 
 /**
  * post a message to the classroom
@@ -246,12 +240,11 @@ exports.getUserInfo = function(userName) {
  * className String the name of the class
  * no response value expected for this operation
  **/
-exports.postClassMessage = function(body,userName,className) {
-  return new Promise(function(resolve, reject) {
+exports.postClassMessage = function (body, userName, className) {
+  return new Promise(function (resolve, reject) {
     resolve();
   });
-}
-
+};
 
 /**
  * change class info
@@ -261,12 +254,11 @@ exports.postClassMessage = function(body,userName,className) {
  * className String the name of the class
  * no response value expected for this operation
  **/
-exports.putClassInfouser = function(body,userName,className) {
-  return new Promise(function(resolve, reject) {
+exports.putClassInfouser = function (body, userName, className) {
+  return new Promise(function (resolve, reject) {
     resolve();
   });
-}
-
+};
 
 /**
  * change class info
@@ -275,12 +267,11 @@ exports.putClassInfouser = function(body,userName,className) {
  * className String the name of the class
  * no response value expected for this operation
  **/
-exports.putClassInfoAdmin = function(body,className) {
-  return new Promise(function(resolve, reject) {
+exports.putClassInfoAdmin = function (body, className) {
+  return new Promise(function (resolve, reject) {
     resolve();
   });
-}
-
+};
 
 /**
  * upload student grades in tests
@@ -290,9 +281,8 @@ exports.putClassInfoAdmin = function(body,className) {
  * className String the name of the class
  * no response value expected for this operation
  **/
-exports.uploadUserGrade = function(body,userName,className) {
-  return new Promise(function(resolve, reject) {
+exports.uploadUserGrade = function (body, userName, className) {
+  return new Promise(function (resolve, reject) {
     resolve();
   });
-}
-
+};
