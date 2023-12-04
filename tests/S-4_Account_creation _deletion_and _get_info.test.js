@@ -50,6 +50,11 @@ test('createUser resolves when called with a user model', async (t) => {
     await onlyFunc.createUser(userModel);
   });
 
+  // Check that the function does NOT throw an error
+  await t.notThrowsAsync(
+    onlyFunc.createUser(userModel)
+  );
+
 });
 
 // Test for:    POST    /admin/user
@@ -126,20 +131,12 @@ test('Wrong input POST endpoint /admin/user', async (t) => {
 // Test for Empty input:    POST    /admin/user
 test('Empty input POST endpoint /admin/user', async (t) => {
   await t.throwsAsync(
-    async () => {
-      await t.context.got.post('admin/user', {})
-    },
+    t.context.got.post('admin/user', {}),
     { instanceOf: t.context.got.HTTPError, message: /Response code 415/ }
     // Or we can use this 'Response code 415 (Unsupported Media Type)'
   )
 })
 
-// // Testing a different way for Empty input:    POST    /admin/user
-// test('Fancy Empty input POST endpoint /admin/user', async t => {
-//     const error = await t.throws(  (t) => { t.context.got.post("admin/user", { }) } );
-//     console.log(error)
-//     t.is(error.message, '...');
-// });
 
 // =========================== DELETE /admin/user/{userName} =========================== //
 
@@ -148,9 +145,9 @@ test('Empty input POST endpoint /admin/user', async (t) => {
 test('deleteUser resolves when called with a user name', async (t) => {  
   const userNameToDelete = 'exampleUserName';
 
-  await t.notThrowsAsync(async () => {
-    await onlyFunc.deleteUser(userNameToDelete);
-  });
+  await t.notThrowsAsync(
+    onlyFunc.deleteUser(userNameToDelete)
+  );
 
 });
 
@@ -180,9 +177,7 @@ test('Empty input DELETE endpoint /admin/user/{userName}', async (t) => {
   const userNameToDelete = ''
 
   await t.throwsAsync(
-    async () => {
-      await t.context.got.delete(`admin/user/${userNameToDelete}`)
-    },
+    t.context.got.delete(`admin/user/${userNameToDelete}`),
     { instanceOf: t.context.got.HTTPError, message: /Response code 405/ }
   )
 })
@@ -341,9 +336,7 @@ test('Empty className GET endpoint /user/{userName}/class/{className}', async (t
   const userName = 'userName'
   const className = '' // Don't change that because the dummy data returns only for this className
   await t.throwsAsync(
-    async () => {
-      await t.context.got.get(`user/${userName}/class/${className}`)
-    },
+    t.context.got.get(`user/${userName}/class/${className}`),
     { instanceOf: t.context.got.HTTPError, message: /Response code 404/ }
   )
 })
@@ -354,9 +347,7 @@ test('Empty userName GET endpoint /user/{userName}/class/{className}', async (t)
   const className = 'className'
 
   await t.throwsAsync(
-    async () => {
-      await t.context.got.get(`user/${userName}/class/${className}`)
-    },
+    t.context.got.get(`user/${userName}/class/${className}`),
     { instanceOf: t.context.got.HTTPError, message: /Response code 404/ }
   )
 })
@@ -367,9 +358,6 @@ test('Empty both GET endpoint /user/{userName}/class/{className}', async (t) => 
   const className = ''
 
   await t.throwsAsync(
-    async () => {
-      await t.context.got.get(`user/${userName}/class/${className}`)
-    },
-    { instanceOf: t.context.got.HTTPError, message: /Response code 404/ }
+    t.context.got.get(`user/${userName}/class/${className}`)
   )
 })
