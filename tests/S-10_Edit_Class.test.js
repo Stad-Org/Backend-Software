@@ -37,31 +37,32 @@ test("putClassInfoAdmin", async (t) => {
     )
 })
 
-// Test endpoint
+// Test endpoint for correct input
 test("PUT /admin/class/{className}", async (t) => {
-    // Again, the swaggerhub-generated backend doesn't do anything with the request
     const requestBody = {
         json: {}
     }
     // Test a bunch of valid requests
-    {
-        const classNames = ["someClass", "someOtherClass"]
-        for (const className of classNames) {
-            const { statusCode } = await t.context.got.put(`admin/class/${className}`, requestBody);
-            t.is(statusCode, 200);
-        }
+    const classNames = ["someClass", "someOtherClass"]
+    for (const className of classNames) {
+        const { statusCode } = await t.context.got.put(`admin/class/${className}`, requestBody);
+        t.is(statusCode, 200);
     }
+})
+
+// Test endpoint for incorrect input
+test("Wrong input PUT /admin/class/{className}", async (t) => {
     // Test empty className throws
-    {
-        await t.throwsAsync(t.context.got.put(`admin/class/`, requestBody))
+    const requestBody = {
+        json: {}
     }
+    await t.throwsAsync(t.context.got.put(`admin/class/`, requestBody))
 })
 
 // ------------------ Test putClassInfoUser & PUT /user/{userName}/class/{className} ------------------
 
 // Test service function
 test("putClassInfoUser", async (t) => {
-    // Again, the swaggerhub-generated backend doesn't do anything with the request
     const requestBody = {
         json: {}
     }
@@ -71,26 +72,35 @@ test("putClassInfoUser", async (t) => {
 
 })
 
-// Test endpoint
+// Test endpoint for correct input
 test("PUT /user/{userName}/class/{className}", async (t) => {
-    // Again, the swaggerhub-generated backend doesn't do anything with the request body
     const requestBody = {
         json: {}
     }
-    // Test a bunch of valid requests
-    {
-        const classNames = ["someClass", "someOtherClass"]
-        const userNames = ["someUser", "someOtherUser"]
-        for (const className of classNames) {
-            for (const userName of userNames) {
-                const { statusCode } = await t.context.got.put(`user/${userName}/class/${className}`, requestBody);
-                t.is(statusCode, 200);
-            }
+    // Test a bunch of valid requests 
+    const classNames = ["someClass", "someOtherClass"]
+    const userNames = ["someUser", "someOtherUser"]
+    for (const className of classNames) {
+        for (const userName of userNames) {
+            const { statusCode } = await t.context.got.put(`user/${userName}/class/${className}`, requestBody);
+            t.is(statusCode, 200);
         }
     }
+})
+
+// Test endpoint for incorrect input
+test("Wrong input PUT /user/{userName}/class/{className}", async (t) => {
     // Test that missing className or userName throws
-    {
-        await t.throwsAsync(t.context.got.put(`user/someUserName/class/`, requestBody))
-        await t.throwsAsync(t.context.got.put(`user//class/someClassName`, requestBody))
+    const requestBody = {
+        json: {}
+    }
+    const input_pairs = [
+        ["", "someClassName"],
+        ["someUserName", ""],
+        ["", ""]
+    ]
+    for (const [userName, className] of input_pairs) {
+        const err = await t.throwsAsync(t.context.got.put(`user/${userName}/class/${className}`, requestBody))
+        t.is(err.response.statusCode, 404)
     }
 })
