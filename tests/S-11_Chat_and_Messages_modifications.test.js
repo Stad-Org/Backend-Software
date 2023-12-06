@@ -1,7 +1,7 @@
 // This file contains tests for the following
 // API :
 //      POST    /user/{userName}/class/{className}/chat 
-//      PUT     /user/{userName}/class/{className}/chat
+//      GET     /user/{userName}/class/{className}/chat
 //      DELETE  /user/{userName}/class/{className}/chat/{messageID}
 
 const test = require('ava')
@@ -168,3 +168,112 @@ test('Empty input DELETE endpoint /user/{userName}/class/{className}/chat/{messa
     { instanceOf: t.context.got.HTTPError, message: /Response code 405/ }
   )
 })
+
+
+
+// =========================== GET /user/{userName}/class/{className}/chat =========================== //
+
+// Test the function "getClassChat" that gets called when the endpoint is used
+test('getClassChat resolves when called with a user name and className', async (t) => {
+  const userName = 'userName';
+  const className = 'className';
+
+  // Override the actual implementation with the mock
+  const body = await onlyFunc.getClassChat(userName, className);
+ 
+  // Check the response body structure
+  t.true(Array.isArray(body), 'Response should be an array');
+  t.not(body.length, undefined, 'Expected to be able to get lenght of users array')
+  
+
+  // Loop over each chat entry in the response
+  for (const chatEntry of body) {
+    // Check that the struct has the proper fields
+    t.not(chatEntry.userName, undefined, 'Chat entry should have a userName property');
+    t.not(chatEntry.message, undefined, 'Chat entry should have a message property');
+    t.not(chatEntry.id, undefined, 'Chat entry should have an id property');
+  }
+});
+
+test('GET endpoint /user/{userName}/class/{className}/chat', async (t) => {
+  const { statusCode, body } = await t.context.got.get('user/{userName}/class/{className}/chat')
+
+  // Check status Code
+  t.is(statusCode, 200, 'Expected status code 200 for successful get')
+
+  // Check the response body structure
+  t.true(Array.isArray(body), 'Response should be an array');
+
+})
+
+test('Multiple responses for GET endpoint /user/{userName}/class/{className}/chat', async (t) => {
+  const testData = [
+    {
+      input: {
+        userName: "user1",
+        className: "class1",
+      },
+      expectedStatusCode: 200,
+    },
+    {
+      input: {
+        userName: "user2",
+        className: "class2",
+      },
+      expectedStatusCode: 200,
+    },
+    {
+      // Add more test cases as needed
+      input: {
+        userName: "user3",
+        className: "class3",
+      },
+      expectedStatusCode: 200, // Example: Expect a not found response
+    },
+  ];
+
+  for (const { input, expectedStatusCode } of testData) {
+    try {
+      const { statusCode, body } = await t.context.got.get(`user/${input.userName}/class/${input.className}/chat`);
+
+      // Log the entire response object
+      console.log(`Response for ${JSON.stringify(input)}:`, { statusCode, body });
+
+      // Check status code
+      t.is(statusCode, expectedStatusCode, `Expected status code ${expectedStatusCode}`);
+    } catch (error) {
+      // Log the error for further investigation
+      console.error(`Error for ${JSON.stringify(input)}:`, error);
+      throw error; // Rethrow the error to ensure the test fails
+    }
+  }
+})
+
+
+
+// Test for Empty className "input":    GET /user/{userName}/class/{className}/chat
+test('Empty className GET endpoint /user/{userName}/class/{className}/chat', async (t) => {
+  const userName = 'userName'
+  const className = '' // Don't change that because the dummy data returns only for this className
+  await t.throwsAsync(
+    async () => {
+      await t.context.got.get(`user/${userName}/class/${className}/chat`)
+    },
+    { instanceOf: t.context.got.HTTPError, message: /Response code 404/ }
+  )
+})
+
+// Test for Empty userName and className "input":    GET     /user/{userName}/class/{className}
+test('Empty both GET endpoint /user/{userName}/class/{className}/chat', async (t) => {
+  const userName = ''
+  const className = ''
+
+  await t.throwsAsync(
+    async () => {
+      await t.context.got.get(`user/${userName}/class/${className}/chat`)
+    },
+    { instanceOf: t.context.got.HTTPError, message: /Response code 404/ }
+  )
+})
+
+
