@@ -27,7 +27,7 @@ test.after.always(async (t) => {
 
 
 // Test the function "editUserInfo" that gets called when the endpoint is used
-test('editUserInfo resolves when called with a user model and a username', async (t) => {
+test('editUserInfo resolves when called with a user model and a userName', async (t) => {
   // Prepare data
   const userModel = {
     userName: 'userName_dummy',

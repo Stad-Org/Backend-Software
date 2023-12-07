@@ -31,11 +31,11 @@ test('uploadUserGrade resolves when called with a grade Model', async (t) => {
   const gradeModel = {
     grade: 0.8008281904610115,
     className: 'class_name',
-    username: 'user_name'
+    userName: 'user_name'
   };
   // Check that the function does NOT throw an error
   await t.notThrowsAsync(async () => {
-    await onlyFunc.uploadUserGrade(gradeModel, gradeModel.username, gradeModel.className);
+    await onlyFunc.uploadUserGrade(gradeModel, gradeModel.userName, gradeModel.className);
   });
 
 });
@@ -46,7 +46,7 @@ test('POST endpoint /admin/class/{className}/user/{userName}/grade', async (t) =
     json: {
         grade: 0.8008281904610115,
         className: 'class_name',
-        username: 'user_name'
+        userName: 'user_name'
     }
   })
   // Check status Code
@@ -59,17 +59,17 @@ test('Multiple POST endpoint /admin/class/{className}/user/{userName}/grade', as
     {
         grade: 5.534,
         className: 'class_name1',
-        username: 'user_name1'
+        userName: 'user_name1'
     },
     {
         grade: 1.43534,
         className: 'class_name2',
-        username: 'user_name3'
+        userName: 'user_name3'
     },
     {
         grade: 0.67435,
         className: 'class_name3',
-        username: 'user_name3'
+        userName: 'user_name3'
     }
   ]
 
@@ -88,7 +88,7 @@ test('Wrong input POST endpoint /admin/class/{className}/user/{userName}/grade',
         json: {
           grade: 0.8008281904610115,
           className: 796,
-          username: 'user_name'
+          userName: 'user_name'
         }
       });
       // If the request succeeds (status code 200), fail the test
