@@ -9,10 +9,19 @@
  * no response value expected for this operation
  **/
 exports.createClass = function(body) {
+  console.log(body)
   return new Promise(function(resolve, reject) {
-    resolve();
+    if (body == undefined || Object.keys(body).length === 0) {
+      // Reject the promise with a 400 Bad Request response
+      
+      reject({ statusCode: 400, message: 'Bad Request: Body is empty' });
+    } else {
+      // Continue with the operation and resolve the promise
+      resolve(/* some result if needed */);
+    }
+   // resolve() ; 
   });
-}
+};
 
 
 /**
@@ -36,9 +45,15 @@ exports.createUser = function(body) {
  **/
 exports.deleteClass = function(className) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    if (className === undefined) {
+      // Reject the promise with an error indicating that className is undefined
+      reject(new Error('Class name is undefined'));
+    } else {
+      // Continue with the operation and resolve the promise
+      resolve(/* some result if needed */);
+    }
   });
-}
+};
 
 
 /**
@@ -115,7 +130,7 @@ exports.getClassInfoAdmin = function(className) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
-  "className" : className,
+  "className" :  `${className}`,
   "users" : [ {
     "grade" : 6.027456183070403,
     "user" : {

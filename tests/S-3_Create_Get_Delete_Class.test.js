@@ -75,3 +75,182 @@ test("GET /admin/class/{className} returns the data of the class", async (t) => 
     t.is(body.users[i].user.id, i, "the ids should increment");
   }
 });
+
+/**
+ * post class with correct request 
+ */
+test("POST ​/admin​/class returns succes status code", async (t) => {
+  t.plan(1)
+  const classroom = {
+    "className": "className",
+    "users": [
+      {
+        "grade": 6,
+        "user": {
+          "surname": "kiasonas",
+          "name": "name",
+          "id": 0,
+          "userName": "userName",
+          "email": "email"
+        }
+      },
+      {
+        "grade": 8,
+        "user": {
+          "surname": "surname",
+          "name": "name",
+          "id": 1,
+          "userName": "userName",
+          "email": "tester@gmail.com"
+        }
+      }
+    ]
+  }
+
+  const { statusCode } = await t.context.got.post(`admin/class` , {
+    json: classroom
+  });
+
+  t.is(statusCode , 200,  'expetcted status from post request')
+
+  console.log(typeof classroom)
+
+
+
+
+}) 
+
+/**
+ * should be working 
+ * TODO: check it out 
+ */
+test("POST ​/admin​/class returns bad request status code", async (t) => {
+  
+  t.plan(1);
+
+  const error = await t.throwsAsync(async () => {
+    await t.context.got.post(`admin/class`, {
+      json: {}
+    })
+
+  });
+
+  t.is(error.response.statusCode, 400);
+
+
+}) 
+
+/**
+ * Multiple POST requests 
+ */
+
+test("POST ​/admin​/class multiple classes addition", async (t) => {
+ 
+  const classrooms = [{
+    "className": "className",
+    "users": [
+      {
+        "grade": 6,
+        "user": {
+          "surname": "kiasonas",
+          "name": "name",
+          "id": 0,
+          "userName": "userName",
+          "email": "email"
+        }
+      },
+      {
+        "grade": 8,
+        "user": {
+          "surname": "surname",
+          "name": "name",
+          "id": 1,
+          "userName": "userName",
+          "email": "tester@gmail.com"
+        }
+      }
+    ]
+  }, { "className": "className",
+  "users": [
+    {
+      "grade": 6,
+      "user": {
+        "surname": "kiasonas",
+        "name": "name",
+        "id": 0,
+        "userName": "userName",
+        "email": "email"
+      }
+    },
+    {
+      "grade": 8,
+      "user": {
+        "surname": "surname",
+        "name": "name",
+        "id": 1,
+        "userName": "userName",
+        "email": "tester@gmail.com"
+      }
+    }
+  ] }]
+  t.plan(classrooms.length)
+  for (classroom of classrooms){ 
+
+    const { statusCode } = await t.context.got.post(`admin/class` , {
+      json: classroom
+    });
+
+    t.is(statusCode , 200, 'expetcted status from post request')
+
+  }
+
+}) 
+
+/** 
+ * DELETE class 
+ */
+
+test("DELETE ​/admin​/class/{className} class delete", async (t) => {
+
+  t.plan(1) 
+  const className = 'biology'
+  const { statusCode } = await t.context.got.delete(`admin/class/${className}`)
+
+  // Check status Code
+  t.is(statusCode, 200, 'Expected status code 200 for successful deletion')
+
+}) ; 
+
+/**
+ * Delete mulitple classes
+ */
+
+test("DELETE ​/admin​/class/{className} mulitple classes deletion", async (t) => {
+
+  
+  const classNames = ['biology', 'maths', 'literature'] 
+  
+  t.plan(classNames.length) 
+  // Check status Code
+  for (className of classNames) { 
+    const { statusCode } = await t.context.got.delete(`admin/class/${className}`)
+    t.is(statusCode, 200, 'Expected status code 200 for successful deletion') 
+
+  }
+ 
+
+}) ; 
+
+/** 
+ * Class delete bad request
+ */
+test("DELETE ​/admin​/class/{className} class delete bad request", async (t) => {
+  const className = undefined;  // Set className to undefined for the test
+
+  const { statusCode } = await t.throwsAsync(async () => {
+    await t.context.got.delete(`admin/class/${className}`);
+  });
+
+  t.is(statusCode, 400);
+  // Check status Code
+});
