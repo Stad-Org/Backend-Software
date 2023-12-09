@@ -9,12 +9,12 @@
  * no response value expected for this operation
  **/
 exports.createClass = function(body) {
-  console.log(body)
+  
   return new Promise(function(resolve, reject) {
     if (body == undefined || Object.keys(body).length === 0) {
       // Reject the promise with a 400 Bad Request response
       
-      reject({ statusCode: 400, message: 'Bad Request: Body is empty' });
+      reject({ statusCode: 400});
     } else {
       // Continue with the operation and resolve the promise
       resolve(/* some result if needed */);
@@ -47,7 +47,8 @@ exports.deleteClass = function(className) {
   return new Promise(function(resolve, reject) {
     if (className === undefined) {
       // Reject the promise with an error indicating that className is undefined
-      reject(new Error('Class name is undefined'));
+
+      reject({ statusCode: 400});
     } else {
       // Continue with the operation and resolve the promise
       resolve(/* some result if needed */);
