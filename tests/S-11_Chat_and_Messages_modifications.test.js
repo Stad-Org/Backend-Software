@@ -38,7 +38,7 @@ test.after.always(async (t) => {
 test('createChat resolves when called with a chat model', async (t) => {
   // Prepare data
   const chatModel = {
-    username: "name_dummy", 
+    userName: "name_dummy", 
     message: "message_dummy"
   };
 
@@ -54,7 +54,7 @@ test('POST endpoint /user/{userName}/class/{className}/chat', async (t) => {
   const { statusCode } = await t.context.got.post('user/{userName}/class/{className}/chat', {
     // Give it dummy data
     json: {
-      username: "name_dummy", 
+      userName: "name_dummy", 
       message: "message_dummy"
     }
   })
@@ -68,15 +68,15 @@ test('Multiple POST /user/{userName}/class/{className}/chat', async (t) => {
   // Prepare data
   const chatToCreate = [
     {
-      username: "name_dummy1", 
+      userName: "name_dummy1", 
       message: "message_dummy1"
     },
     {
-      username: "name_dummy2", 
+      userName: "name_dummy2", 
       message: "message_dummy2"
     },
     {
-      username: "name_dummy3", 
+      userName: "name_dummy3", 
       message: "message_dummy3"
     }
   ]
@@ -85,7 +85,7 @@ test('Multiple POST /user/{userName}/class/{className}/chat', async (t) => {
     const { statusCode } = await t.context.got.post('user/{userName}/class/{className}/chat', { json: chatData })
 
     // Check status Code
-    t.is(statusCode, 200, `Expected status code 200 for successful post, Bad request for chat ${chatData.username}`)
+    t.is(statusCode, 200, `Expected status code 200 for successful post, Bad request for chat ${chatData.userName}`)
   }
 })
 
@@ -94,7 +94,7 @@ test('Wrong input POST endpoint /user/{userName}/class/{className}/chat', async 
   const { statusCode } = await t.context.got.post('user/{userName}/class/{className}/chat', {
     // Give it dummy data
     json: {
-      // username: "name_dummy", 
+      // userName: "name_dummy", 
       // message: "message_dummy"
     }
   })
@@ -114,13 +114,6 @@ test('Empty input POST endpoint /user/{userName}/class/{className}/chat', async 
     // Or we can use this 'Response code 415 (Unsupported Media Type)'
   )
 })
-
-// // Testing a different way for Empty input:    POST   /user/{userName}/class/{className}/chat
-// test('Fancy Empty input POST endpoint /user/{userName}/class/{className}/chat', async t => {
-//     const error = await t.throws(  (t) => { t.context.got.post("/user/{userName}/class/{className}/chat", { }) } );
-//     console.log(error)
-//     t.is(error.message, '...');
-// });
 
 
 // =================== DELETE /user/{userName}/class/{className}/chat/{messageID} ==================== //
@@ -180,11 +173,11 @@ test('getClassChat resolves when called with a user name and className', async (
 
   // Override the actual implementation with the mock
   const body = await onlyFunc.getClassChat(userName, className);
- 
+  console.log(body)
+
   // Check the response body structure
   t.true(Array.isArray(body), 'Response should be an array');
   t.not(body.length, undefined, 'Expected to be able to get lenght of users array')
-  
 
   // Loop over each chat entry in the response
   for (const chatEntry of body) {
