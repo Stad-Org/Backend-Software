@@ -200,8 +200,8 @@ exports.getUserGrade = function(userName,className) {
     var examples = {};
     examples['application/json'] = {
   "grade" : 0.8008281904610115,
-  "className" : "className",
-  "username" : "username"
+  "className" : className,
+  "userName" : userName
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
