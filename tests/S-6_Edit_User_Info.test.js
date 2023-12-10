@@ -129,7 +129,7 @@ test('Wrong input PUT endpoint /user/{userName}', async (t) => {
   })
 
 // Test for Empty input  
-test('Empty input POST endpoint /user/{userName}', async (t) => {
+test('Empty input PUT endpoint /user/{userName}', async (t) => {
   await t.throwsAsync(
     async () => {
       await t.context.got.put('user/{userName}', {})
