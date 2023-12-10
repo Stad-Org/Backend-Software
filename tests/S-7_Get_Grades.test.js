@@ -56,6 +56,33 @@ test('GET endpoint user/{userName}/class/{className}/grade', async (t) => {
   testValidGrade(t, body)
 })
 
+// Test for multiple GET requests
+test('Multiple GET requests for /user/{userName}/class/{className}/grade', async (t) => {
+  const usernames = ['user1', 'user2', 'user3'];
+  const classnames = ['class1', 'class2', 'class3'];
+
+  for (const userName of usernames) {
+    for (const className of classnames) {
+      // Make a GET request for each combination of username and classname
+      const { statusCode, body } = await t.context.got.get(`user/${userName}/class/${className}/grade`);
+
+      // Add assertions for each response
+      if (statusCode === 200) {
+        // Successful response
+        testValidClass(t, body, className);
+        testValidUser(t, body, userName);
+        testValidGrade(t, body);
+      } else if (statusCode === 404) {
+        // Handle 404 Not Found response
+        t.fail(`User ${userName} for class ${className} not found`);
+      } else {
+        // Other status codes 
+        t.fail(`Unexpected status code: ${statusCode}`);
+      }
+    }
+  }
+})
+
   
 // Test for Empty className "input"
 test('Empty className GET endpoint /user/{userName}/class/{className}/grade', async (t) => {
