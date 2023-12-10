@@ -116,9 +116,9 @@ exports.getClassChat = function(userName,className) {
         "id" : 0
       },
       {
-        "userName" : "username2",
-        "message" : "message2",
-        "id" : 0
+        "userName" : "username1",
+        "message" : "message1",
+        "id" : 1
       }
     ]
     
