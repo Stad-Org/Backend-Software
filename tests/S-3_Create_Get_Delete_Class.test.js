@@ -261,3 +261,56 @@ test("DELETE ​/admin​/class/{className} class delete bad request", async (t)
   
   // Check status Code
 });
+
+/** 
+ * GET class (user)
+ */
+test("GET /user/{userName}/class/{className}", async (t) => {
+
+  const className = "maths";
+  const { statusCode, body } = await t.context.got(`admin/class/${className}`);
+
+  t.is(statusCode, 200, "status code should be 200");
+
+  // Check for valid "Class" schema
+  t.truthy(body, "checks if the body has any values");
+  t.is(body.className, className, "the class name should be the same of the request");
+
+  // Check for valid "EnrolledUser" schema
+  t.is(typeof body.users[0].grade, "number", "The type of the grade should be number");
+  t.true(Array.isArray(body.users), "it should be an array");
+
+  // Check for valid "User" schema
+  aUser = body.users[0].user
+  t.is(typeof aUser.email, "string", "the email should a string");
+  t.is(typeof aUser.name, "string", "the name should a string");
+  t.is(typeof aUser.surname, "string", "the surname should a string");
+  t.is(typeof aUser.id, "number", "the id should a number");
+
+  // Test with exact values
+  expectedClassObject = {
+    "className" : `${className}`,
+    "users" : [ {
+      "grade" : 6.027456183070403,
+      "user" : {
+        "surname" : "surname",
+        "name" : "name",
+        "id" : 0,
+        "userName" : "userName",
+        "email" : "email"
+      }
+    }, {
+      "grade" : 6.027456183070403,
+      "user" : {
+        "surname" : "surname",
+        "name" : "name",
+        "id" : 1,
+        "userName" : "userName",
+        "email" : "email"
+      }
+    } ]
+  }
+
+  t.deepEqual(body, expectedClassObject, "The response should be equal to the expected object");
+
+});
