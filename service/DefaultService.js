@@ -173,7 +173,7 @@ exports.getClassInfoUser = function(userName,className) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
-  "className" : `${className}
+  "className" : `${className}`,
   "users" : [ {
     "grade" : 6.027456183070403,
     "user" : {
