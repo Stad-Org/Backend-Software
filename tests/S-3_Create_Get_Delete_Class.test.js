@@ -26,8 +26,8 @@ test.after.always(async (t) => {
 
 
 
-/* 
-* Utility functions for testing the schema of the responses
+/**
+* Test User schema
 */
 function testValidUser(t, user) {
   t.is(typeof user.email, "string");
@@ -36,6 +36,9 @@ function testValidUser(t, user) {
   t.is(typeof user.id, "number");
 }
 
+/**
+ * Test EnrolledUser schema
+*/
 function testValidEnrolledUser(t, enrolledUser) {
   t.is(typeof enrolledUser.grade, "number");
   t.true(enrolledUser.grade >= 0 && enrolledUser.grade <= 10);
@@ -55,7 +58,7 @@ function testValidClass(t, aClass) {
 }
 
 /**
- * This is the expected response for the GET request
+ * This is the expected response for the GET requests
  */
 const expectedClassObject = {
   className: "maths",
@@ -84,9 +87,8 @@ const expectedClassObject = {
 };
 
 /**
- * These are some classes to test class creation POST request
+ * These are some Classes to test class creation POST request
  */
-
 const exampleClassObjects = [{
   "className": "className",
   "users": [
@@ -151,7 +153,7 @@ test("GET /admin/class/{className} returns the data of the class", async (t) => 
 });
 
 /**
- *  Also test service function getClassInfoAdmin 
+ *  Also test corresponding service function getClassInfoAdmin 
  */
 test("getClassInfoAdmin returns the data of the class", async (t) => {
   const className = "maths";
@@ -160,7 +162,7 @@ test("getClassInfoAdmin returns the data of the class", async (t) => {
   t.truthy(body, "checks if the body has any values");
   testValidClass(t, body);
   t.deepEqual(body, expectedClassObject, "the response should be equal to the expected object")
-})
+});
 
 
 /**
@@ -174,7 +176,23 @@ test("POST ​/admin​/class returns succes status code", async (t) => {
   });
 
   t.is(statusCode, 200, 'expected status from post request')
-})
+});
+
+/**
+ * Multiple POST requests 
+ */
+test("POST ​/admin​/class multiple classes addition", async (t) => {
+
+  const classrooms = exampleClassObjects
+
+  for (const classroom of classrooms) {
+    const { statusCode } = await t.context.got.post(`admin/class`, {
+      json: classroom
+    });
+
+    t.is(statusCode, 200, 'expected status from post request')
+  }
+});
 
 
 /**
@@ -197,35 +215,19 @@ test("POST ​/admin​/class returns bad request status code", async (t) => {
     json: {}
   })
   //should be 400 but sends 200
-})
+});
+
 
 /**
- * Multiple POST requests 
+ * Also test corresponding service function createClass
  */
-
-test("POST ​/admin​/class multiple classes addition", async (t) => {
-
-  const classrooms = exampleClassObjects
-
-  for (const classroom of classrooms) {
-    const { statusCode } = await t.context.got.post(`admin/class`, {
-      json: classroom
-    });
-
-    t.is(statusCode, 200, 'expected status from post request')
-  }
-})
-
-/**
- * Also test service function createClass
- */
-
 test("createClass creates a class", async (t) => {
   const classroom = exampleClassObjects[0]
 
   // We can only test that it does not throw an error
   await t.notThrowsAsync(onlyFunc.createClass(classroom));
-})
+});
+
 
 /** 
  * DELETE class 
@@ -238,18 +240,6 @@ test("DELETE ​/admin​/class/{className} class delete", async (t) => {
   // Check status Code
   t.is(statusCode, 200, 'Expected status code 200 for successful deletion')
 });
-
-
-/**
- * Also test service function deleteClass
- */
-
-test("deleteClass deletes a class", async (t) => {
-  const className = "maths";
-
-  // We can only test that it does not throw an error
-  await t.notThrowsAsync(onlyFunc.deleteClass(className));
-})
 
 /**
  * DELETE mulitple classes
@@ -265,6 +255,16 @@ test("DELETE ​/admin​/class/{className} mulitple classes deletion", async (t
   }
 });
 
+/**
+ * Also test corresponding service function deleteClass
+ */
+test("deleteClass deletes a class", async (t) => {
+  const className = "maths";
+
+  // We can only test that it does not throw an error
+  await t.notThrowsAsync(onlyFunc.deleteClass(className));
+});
+
 /** 
  * DELETE class bad request
  */
@@ -276,6 +276,7 @@ test("DELETE ​/admin​/class/{className} class delete bad request", async (t)
     console.log('the response is ', response.statusCode)
   });
 });
+
 
 /** 
  * GET class (user)
@@ -292,7 +293,7 @@ test("GET /user/{userName}/class/{className}", async (t) => {
 });
 
 /**
- * Also test service function getClassInfoUser
+ * Also test corresponding service function getClassInfoUser
  */
 test("getClassInfoUser returns the data of the class", async (t) => {
   const userName = "user123"
@@ -302,4 +303,4 @@ test("getClassInfoUser returns the data of the class", async (t) => {
   t.truthy(body, "checks if the body has any values");
   testValidClass(t, body);
   t.deepEqual(body, expectedClassObject, "the response should be equal to the expected object")
-})
+});
