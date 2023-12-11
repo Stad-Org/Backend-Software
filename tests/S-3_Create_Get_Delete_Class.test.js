@@ -26,6 +26,9 @@ test.after.always(async (t) => {
 
 
 
+
+// Some utility functions/objects for testing
+
 /**
 * Test User schema
 */
@@ -45,6 +48,9 @@ function testValidEnrolledUser(t, enrolledUser) {
   testValidUser(t, enrolledUser.user);
 }
 
+/**
+ * Test Class schema
+ */
 function testValidClass(t, aClass) {
   t.is(typeof aClass.className, "string");
   t.true(Array.isArray(aClass.users));
@@ -138,6 +144,11 @@ const exampleClassObjects = [{
     }
   ]
 }]
+
+
+
+
+// Actual tests start here
 
 /**
  * GET admin class info
