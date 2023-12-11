@@ -126,7 +126,7 @@ paths:
       x-swagger-router-controller: Default
     put:
       summary: change class info
-      operationId: put Class Info user
+      operationId: putClassInfoUser
       parameters:
       - name: userName
         in: path

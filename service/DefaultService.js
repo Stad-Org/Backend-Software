@@ -261,7 +261,7 @@ exports.postClassMessage = function(body,userName,className) {
  * className String the name of the class
  * no response value expected for this operation
  **/
-exports.putClassInfouser = function(body,userName,className) {
+exports.putClassInfoUser = function(body,userName,className) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
