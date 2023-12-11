@@ -188,7 +188,7 @@ exports.getClassInfoUser = function(userName,className) {
     "user" : {
       "surname" : "surname",
       "name" : "name",
-      "id" : 0,
+      "id" : 1,
       "userName" : "userName",
       "email" : "email"
     }

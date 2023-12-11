@@ -3,6 +3,7 @@ const app = require("../index.js");
 const http = require("http");
 const listen = require("test-listen");
 const got = require("got");
+const onlyFunc = require('../service/DefaultService.js');
 
 // Initialize server
 test.before(async (t) => {
@@ -34,6 +35,66 @@ test.after.always(async (t) => {
 //     t.is(body.email, 'email');
 // })
 
+// Utility functions for testing the schema of the responses
+
+function isValidUser(user) {
+  return (
+    typeof user.email === "string" &&
+    typeof user.name === "string" &&
+    typeof user.surname === "string" &&
+    typeof user.id === "number"
+  );
+}
+
+function isValidEnrolledUser(enrolledUser) {
+  return (
+    typeof enrolledUser.grade === "number" &&
+    enrolledUser.grade <= 10 &&
+    enrolledUser.grade >= 0 &&
+    isValidUser(enrolledUser.user)
+  );
+}
+
+function isValidClass(aClass) {
+  isValid = true;
+  isValid = isValid && typeof aClass.className === "string";
+  isValid = isValid && Array.isArray(aClass.users);
+  prevId = -1;
+  for (enrolledUser of aClass.users) {
+    isValid = isValid && isValidEnrolledUser(enrolledUser);
+    // Ids should be sorted
+    isValid = isValid && (enrolledUser.user.id > prevId);
+    prevId = enrolledUser.user.id ;
+  }
+  return isValid;
+}
+
+const expectedClassObject = {
+  className: "maths",
+  users: [
+    {
+      grade: 6.027456183070403,
+      user: {
+        surname: "surname",
+        name: "name",
+        id: 0,
+        userName: "userName",
+        email: "email",
+      },
+    },
+    {
+      grade: 6.027456183070403,
+      user: {
+        surname: "surname",
+        name: "name",
+        id: 1,
+        userName: "userName",
+        email: "email",
+      },
+    },
+  ],
+};
+
 /**
  * Get admin class info
  */
@@ -41,40 +102,19 @@ test("GET /admin/class/{className} returns the data of the class", async (t) => 
   const className = "maths";
   const { statusCode, body } = await t.context.got(`admin/class/${className}`);
 
-  t.plan(11 + body.users.length);
+  t.plan(4);
 
   t.is(statusCode, 200, "status code should be 200");
+
   t.truthy(body, "checks if the body has any values");
 
-  t.is(
-    body.className,
-    className,
-    "the class name should be the same of the request"
-  );
+  t.true(isValidClass(body), "the returned object should follow the Class schema");
 
-  t.true(Array.isArray(body.users), "it should be an array");
+  t.deepEqual(body, expectedClassObject, "the response should be equal to the expected object")
 
-  t.is(
-    typeof body.users[0].grade,
-    "number",
-    "The type of the grade should be number"
-  );
-  t.is(body.users[1].user.id, 1);
-
-  t.not(body.users[1].user.name, "Jason", "the actual value is username");
-  t.not(body.users[0].grade, 12, "less than 10");
-  t.not(body.users[0].user.email, undefined);
-  t.is(typeof body.users[0].user.name, "string", "the name should a string");
-  t.is(
-    typeof body.users[0].user.surname,
-    "string",
-    "the surname should a string"
-  );
-
-  for (let i = 0; i < body.users.length; i++) {
-    t.is(body.users[i].user.id, i, "the ids should increment");
-  }
 });
+
+
 
 /**
  * post class with correct request 
@@ -272,44 +312,9 @@ test("GET /user/{userName}/class/{className}", async (t) => {
 
   t.is(statusCode, 200, "status code should be 200");
 
-  // Check for valid "Class" schema
   t.truthy(body, "checks if the body has any values");
-  t.is(body.className, className, "the class name should be the same of the request");
 
-  // Check for valid "EnrolledUser" schema
-  t.is(typeof body.users[0].grade, "number", "The type of the grade should be number");
-  t.true(Array.isArray(body.users), "it should be an array");
-
-  // Check for valid "User" schema
-  aUser = body.users[0].user
-  t.is(typeof aUser.email, "string", "the email should a string");
-  t.is(typeof aUser.name, "string", "the name should a string");
-  t.is(typeof aUser.surname, "string", "the surname should a string");
-  t.is(typeof aUser.id, "number", "the id should a number");
-
-  // Test with exact values
-  expectedClassObject = {
-    "className" : `${className}`,
-    "users" : [ {
-      "grade" : 6.027456183070403,
-      "user" : {
-        "surname" : "surname",
-        "name" : "name",
-        "id" : 0,
-        "userName" : "userName",
-        "email" : "email"
-      }
-    }, {
-      "grade" : 6.027456183070403,
-      "user" : {
-        "surname" : "surname",
-        "name" : "name",
-        "id" : 1,
-        "userName" : "userName",
-        "email" : "email"
-      }
-    } ]
-  }
+  t.true(isValidClass(body), "the returned object should follow the Class schema");
 
   t.deepEqual(body, expectedClassObject, "The response should be equal to the expected object");
 
