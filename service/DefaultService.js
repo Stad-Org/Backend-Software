@@ -173,7 +173,7 @@ exports.getClassInfoUser = function(userName,className) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
-  "className" : className,
+  "className" : `${className}
   "users" : [ {
     "grade" : 6.027456183070403,
     "user" : {
@@ -216,8 +216,8 @@ exports.getUserGrade = function(userName,className) {
     var examples = {};
     examples['application/json'] = {
   "grade" : 0.8008281904610115,
-  "className" : "className",
-  "username" : "username"
+  "className" : className,
+  "userName" : userName
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
