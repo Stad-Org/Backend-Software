@@ -24,49 +24,35 @@ test.after.always(async (t) => {
   console.log("Successfully closed test server");
 });
 
-// // Replace this with correct endpoints
-// test("endpoint User", async (t)=>{
-//     const {body, statusCode} = await t.context.got("user/123");
-//     t.is(statusCode, 200);
-//     t.is(body.surname, 'surname');
-//     t.is(body.name, 'name');
-//     t.is(body.id, 0);
-//     t.is(body.userName, 'userName');
-//     t.is(body.email, 'email');
-// })
 
-// Utility functions for testing the schema of the responses
 
-function isValidUser(user) {
-  return (
-    typeof user.email === "string" &&
-    typeof user.name === "string" &&
-    typeof user.surname === "string" &&
-    typeof user.id === "number"
-  );
+/* 
+* Utility functions for testing the schema of the responses
+*/
+
+function testValidUser(t, user) {
+  t.is(typeof user.email, "string");
+  t.is(typeof user.name, "string");
+  t.is(typeof user.surname, "string");
+  t.is(typeof user.id, "number");
 }
 
-function isValidEnrolledUser(enrolledUser) {
-  return (
-    typeof enrolledUser.grade === "number" &&
-    enrolledUser.grade <= 10 &&
-    enrolledUser.grade >= 0 &&
-    isValidUser(enrolledUser.user)
-  );
+function testValidEnrolledUser(t, enrolledUser) {
+  t.is(typeof enrolledUser.grade, "number");
+  t.true(enrolledUser.grade >= 0 && enrolledUser.grade <= 10);
+  testValidUser(t, enrolledUser.user);
 }
 
-function isValidClass(aClass) {
-  isValid = true;
-  isValid = isValid && typeof aClass.className === "string";
-  isValid = isValid && Array.isArray(aClass.users);
+function testValidClass(t, aClass) {
+  t.is(typeof aClass.className, "string");
+  t.true(Array.isArray(aClass.users));
   prevId = -1;
   for (enrolledUser of aClass.users) {
-    isValid = isValid && isValidEnrolledUser(enrolledUser);
+    testValidEnrolledUser(t, enrolledUser);
     // Ids should be sorted
-    isValid = isValid && (enrolledUser.user.id > prevId);
-    prevId = enrolledUser.user.id ;
+    t.true(enrolledUser.user.id > prevId);
+    prevId = enrolledUser.user.id;
   }
-  return isValid;
 }
 
 const expectedClassObject = {
@@ -102,13 +88,11 @@ test("GET /admin/class/{className} returns the data of the class", async (t) => 
   const className = "maths";
   const { statusCode, body } = await t.context.got(`admin/class/${className}`);
 
-  t.plan(4);
-
   t.is(statusCode, 200, "status code should be 200");
 
   t.truthy(body, "checks if the body has any values");
 
-  t.true(isValidClass(body), "the returned object should follow the Class schema");
+  testValidClass(t, body);
 
   t.deepEqual(body, expectedClassObject, "the response should be equal to the expected object")
 
@@ -120,7 +104,6 @@ test("GET /admin/class/{className} returns the data of the class", async (t) => 
  * post class with correct request 
  */
 test("POST ​/admin​/class returns succes status code", async (t) => {
-  t.plan(1)
   const classroom = {
     "className": "className",
     "users": [
@@ -147,49 +130,48 @@ test("POST ​/admin​/class returns succes status code", async (t) => {
     ]
   }
 
-  const { statusCode } = await t.context.got.post(`admin/class` , {
+  const { statusCode } = await t.context.got.post(`admin/class`, {
     json: classroom
   });
 
-  t.is(statusCode , 200,  'expetcted status from post request')
+  t.is(statusCode, 200, 'expetcted status from post request')
 
   console.log(typeof classroom)
 
 
 
 
-}) 
+})
 
 /**
  * should be working 
  * TODO: check it out 
  */
 test("POST ​/admin​/class returns bad request status code", async (t) => {
-  
-  t.plan(1);
+
   //Throws async is our test 
   await t.throwsAsync(async () => {
-    response =  await t.context.got.delete(`admin/class/` , {
-      json:{}
+    response = await t.context.got.delete(`admin/class/`, {
+      json: {}
     });
     console.log('the response is ', response.statusCode)
-   });
+  });
 
   //this is done purely for reaching the branch in the Default Service. I cannot find another way to reach it 
   await t.context.got.post(`admin/class`, {
-      json: {}
-    })
-    //should be 400 but sends 200
- 
+    json: {}
+  })
+  //should be 400 but sends 200
 
-}) 
+
+})
 
 /**
  * Multiple POST requests 
  */
 
 test("POST ​/admin​/class multiple classes addition", async (t) => {
- 
+
   const classrooms = [{
     "className": "className",
     "users": [
@@ -214,41 +196,43 @@ test("POST ​/admin​/class multiple classes addition", async (t) => {
         }
       }
     ]
-  }, { "className": "className",
-  "users": [
-    {
-      "grade": 6,
-      "user": {
-        "surname": "kiasonas",
-        "name": "name",
-        "id": 0,
-        "userName": "userName",
-        "email": "email"
+  }, {
+    "className": "className",
+    "users": [
+      {
+        "grade": 6,
+        "user": {
+          "surname": "kiasonas",
+          "name": "name",
+          "id": 0,
+          "userName": "userName",
+          "email": "email"
+        }
+      },
+      {
+        "grade": 8,
+        "user": {
+          "surname": "surname",
+          "name": "name",
+          "id": 1,
+          "userName": "userName",
+          "email": "tester@gmail.com"
+        }
       }
-    },
-    {
-      "grade": 8,
-      "user": {
-        "surname": "surname",
-        "name": "name",
-        "id": 1,
-        "userName": "userName",
-        "email": "tester@gmail.com"
-      }
-    }
-  ] }]
-  t.plan(classrooms.length)
-  for (classroom of classrooms){ 
+    ]
+  }]
 
-    const { statusCode } = await t.context.got.post(`admin/class` , {
+  for (classroom of classrooms) {
+
+    const { statusCode } = await t.context.got.post(`admin/class`, {
       json: classroom
     });
 
-    t.is(statusCode , 200, 'expetcted status from post request')
+    t.is(statusCode, 200, 'expetcted status from post request')
 
   }
 
-}) 
+})
 
 /** 
  * DELETE class 
@@ -256,14 +240,13 @@ test("POST ​/admin​/class multiple classes addition", async (t) => {
 
 test("DELETE ​/admin​/class/{className} class delete", async (t) => {
 
-  t.plan(1) 
   const className = 'biology'
   const { statusCode } = await t.context.got.delete(`admin/class/${className}`)
 
   // Check status Code
   t.is(statusCode, 200, 'Expected status code 200 for successful deletion')
 
-}) ; 
+});
 
 /**
  * Delete mulitple classes
@@ -271,34 +254,31 @@ test("DELETE ​/admin​/class/{className} class delete", async (t) => {
 
 test("DELETE ​/admin​/class/{className} mulitple classes deletion", async (t) => {
 
-  
-  const classNames = ['biology', 'maths', 'literature'] 
-  
-  t.plan(classNames.length) 
+
+  const classNames = ['biology', 'maths', 'literature']
+
   // Check status Code
-  for (className of classNames) { 
+  for (className of classNames) {
     const { statusCode } = await t.context.got.delete(`admin/class/${className}`)
-    t.is(statusCode, 200, 'Expected status code 200 for successful deletion') 
+    t.is(statusCode, 200, 'Expected status code 200 for successful deletion')
 
   }
- 
 
-}) ; 
+});
 
 /** 
  * Class delete bad request
  */
 test("DELETE ​/admin​/class/{className} class delete bad request", async (t) => {
 
- t.plan(1)
- await t.throwsAsync(async () => {
-   response =  await t.context.got.delete(`admin/class/`);
-   console.log('the response is ', response.statusCode)
+  await t.throwsAsync(async () => {
+    response = await t.context.got.delete(`admin/class/`);
+    console.log('the response is ', response.statusCode)
   });
 
-  
+
   //should be 400 but sends 200
-  
+
   // Check status Code
 });
 
@@ -314,7 +294,7 @@ test("GET /user/{userName}/class/{className}", async (t) => {
 
   t.truthy(body, "checks if the body has any values");
 
-  t.true(isValidClass(body), "the returned object should follow the Class schema");
+  testValidClass(t, body);
 
   t.deepEqual(body, expectedClassObject, "The response should be equal to the expected object");
 
