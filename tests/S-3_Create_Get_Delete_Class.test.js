@@ -29,7 +29,6 @@ test.after.always(async (t) => {
 /* 
 * Utility functions for testing the schema of the responses
 */
-
 function testValidUser(t, user) {
   t.is(typeof user.email, "string");
   t.is(typeof user.name, "string");
@@ -82,7 +81,7 @@ const expectedClassObject = {
 };
 
 /**
- * Get admin class info
+ * GET admin class info
  */
 test("GET /admin/class/{className} returns the data of the class", async (t) => {
   const className = "maths";
@@ -98,10 +97,23 @@ test("GET /admin/class/{className} returns the data of the class", async (t) => 
 
 });
 
+/**
+ *  Also test service function getClassInfoAdmin 
+ */
+test("getClassInfoAdmin returns the data of the class", async (t) => {
+  const className = "maths";
+  const body = await onlyFunc.getClassInfoAdmin(className);
+
+  t.truthy(body, "checks if the body has any values");
+
+  testValidClass(t, body);
+
+  t.deepEqual(body, expectedClassObject, "the response should be equal to the expected object")
+})
 
 
 /**
- * post class with correct request 
+ * POST class with correct request 
  */
 test("POST ​/admin​/class returns succes status code", async (t) => {
   const classroom = {
@@ -134,18 +146,15 @@ test("POST ​/admin​/class returns succes status code", async (t) => {
     json: classroom
   });
 
-  t.is(statusCode, 200, 'expetcted status from post request')
-
-  console.log(typeof classroom)
-
-
-
+  t.is(statusCode, 200, 'expected status from post request')
 
 })
 
+
 /**
- * should be working 
- * TODO: check it out 
+ * 
+ * POST class with bad request 
+ * TODO: should be working , check it out 
  */
 test("POST ​/admin​/class returns bad request status code", async (t) => {
 
@@ -222,22 +231,55 @@ test("POST ​/admin​/class multiple classes addition", async (t) => {
     ]
   }]
 
-  for (classroom of classrooms) {
-
+  for (const classroom of classrooms) {
     const { statusCode } = await t.context.got.post(`admin/class`, {
       json: classroom
     });
 
-    t.is(statusCode, 200, 'expetcted status from post request')
-
+    t.is(statusCode, 200, 'expected status from post request')
   }
+
+})
+
+/**
+ * Also test service function createClass
+ */
+
+test("createClass creates a class", async (t) => {
+  const classroom = {
+    "className": "className",
+    "users": [
+      {
+        "grade": 6,
+        "user": {
+          "surname": "kiasonas",
+          "name": "name",
+          "id": 0,
+          "userName": "userName",
+          "email": "email"
+        }
+      },
+      {
+        "grade": 8,
+        "user": {
+          "surname": "surname",
+          "name": "name",
+          "id": 1,
+          "userName": "userName",
+          "email": "email"
+        }
+      }
+    ]
+  }
+
+  // We can only test that it does not throw an error
+  await t.notThrowsAsync(onlyFunc.createClass(classroom));
 
 })
 
 /** 
  * DELETE class 
  */
-
 test("DELETE ​/admin​/class/{className} class delete", async (t) => {
 
   const className = 'biology'
@@ -248,12 +290,23 @@ test("DELETE ​/admin​/class/{className} class delete", async (t) => {
 
 });
 
+
 /**
- * Delete mulitple classes
+ * Also test service function deleteClass
  */
 
-test("DELETE ​/admin​/class/{className} mulitple classes deletion", async (t) => {
+test("deleteClass deletes a class", async (t) => {
+  const className = "maths";
 
+  // We can only test that it does not throw an error
+  await t.notThrowsAsync(onlyFunc.deleteClass(className));
+
+})
+
+/**
+ * DELETE mulitple classes
+ */
+test("DELETE ​/admin​/class/{className} mulitple classes deletion", async (t) => {
 
   const classNames = ['biology', 'maths', 'literature']
 
@@ -261,13 +314,12 @@ test("DELETE ​/admin​/class/{className} mulitple classes deletion", async (t
   for (className of classNames) {
     const { statusCode } = await t.context.got.delete(`admin/class/${className}`)
     t.is(statusCode, 200, 'Expected status code 200 for successful deletion')
-
   }
 
 });
 
 /** 
- * Class delete bad request
+ * DELETE class bad request
  */
 test("DELETE ​/admin​/class/{className} class delete bad request", async (t) => {
 
@@ -276,10 +328,8 @@ test("DELETE ​/admin​/class/{className} class delete bad request", async (t)
     console.log('the response is ', response.statusCode)
   });
 
-
   //should be 400 but sends 200
 
-  // Check status Code
 });
 
 /** 
@@ -299,3 +349,19 @@ test("GET /user/{userName}/class/{className}", async (t) => {
   t.deepEqual(body, expectedClassObject, "The response should be equal to the expected object");
 
 });
+
+/**
+ * Also test service function getClassInfoUser
+ */
+test("getClassInfoUser returns the data of the class", async (t) => {
+  const userName = "user123"
+  const className = "maths";
+  const body = await onlyFunc.getClassInfoUser(userName, className);
+
+  t.truthy(body, "checks if the body has any values");
+
+  testValidClass(t, body);
+
+  t.deepEqual(body, expectedClassObject, "the response should be equal to the expected object")
+}
+)
