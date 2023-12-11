@@ -12,9 +12,9 @@ const got = require('got')
 
 // This is needed to test each function individually 
 const onlyFunc = require('../service/DefaultService.js');
-// onlyFunc.createUser()
-// onlyFunc.deleteUser()
-// onlyFunc.getClassInfoUser
+// onlyFunc.postClassMessage()
+// onlyFunc.deleteMessage()
+// onlyFunc.getClassChat()
 
 // Initialize server
 test.before(async (t) => {
@@ -34,8 +34,8 @@ test.after.always(async (t) => {
 
 // ==============  POST /user/{userName}/class/{className}/chat =========================== //
 
-// Test the function "createChat" that gets called when the endpoint is used
-test('createChat resolves when called with a chat model', async (t) => {
+// Test the function "postClassMessage" that gets called when the endpoint is used
+test('postClassMessage resolves when called with a chat model', async (t) => {
   // Prepare data
   const chatModel = {
     userName: "name_dummy", 
@@ -44,12 +44,12 @@ test('createChat resolves when called with a chat model', async (t) => {
 
   // Check that the function does NOT throw an error
   await t.notThrowsAsync(async () => {
-    await onlyFunc.createUser(chatModel);
+    await onlyFunc.postClassMessage(chatModel);
   });
 
 });
 
-// Test for:    POST    /user/{userName}/class/{className}/chat 
+// Test for: POST /user/{userName}/class/{className}/chat 
 test('POST endpoint /user/{userName}/class/{className}/chat', async (t) => {
   const { statusCode } = await t.context.got.post('user/{userName}/class/{className}/chat', {
     // Give it dummy data
@@ -63,7 +63,7 @@ test('POST endpoint /user/{userName}/class/{className}/chat', async (t) => {
   t.is(statusCode, 200, 'Expected status code 200 for successful post')
 })
 
-// Test for Multiple:    POST    /user/{userName}/class/{className}/chat
+// Test for Multiple: POST /user/{userName}/class/{className}/chat
 test('Multiple POST /user/{userName}/class/{className}/chat', async (t) => {
   // Prepare data
   const chatToCreate = [
@@ -89,7 +89,7 @@ test('Multiple POST /user/{userName}/class/{className}/chat', async (t) => {
   }
 })
 
-// Test for Wrong input:    POST    /user/{userName}/class/{className}/chat
+// Test for Wrong input: POST /user/{userName}/class/{className}/chat
 test('Wrong input POST endpoint /user/{userName}/class/{className}/chat', async (t) => {
   const { statusCode } = await t.context.got.post('user/{userName}/class/{className}/chat', {
     // Give it dummy data
@@ -124,12 +124,12 @@ test('deleteMessage resolves when called with a message id', async (t) => {
   const messageToDelete = 'exampleMessageId';
 
   await t.notThrowsAsync(async () => {
-    await onlyFunc.deleteUser(messageToDelete);
+    await onlyFunc.deleteMessage(messageToDelete);
   });
 
 });
 
-// Test for:    DELETE  /user/{userName}/class/{className}/chat/{messageID}
+// Test for: DELETE /user/{userName}/class/{className}/chat/{messageID}
 test('DELETE endpoint /user/{userName}/class/{className}/chat/{messageID}', async (t) => {
   const messageToDelete = 'dummyMessageId'
   const { statusCode } = await t.context.got.delete(`user/{userName}/class/{className}/chat/${messageToDelete}`)
@@ -150,7 +150,7 @@ test('Multiple DELETE endpoint /user/{userName}/class/{className}/chat/{messageI
   }
 })
 
-// Test for Empty input:    DELETE  /user/{userName}/class/{className}/chat/{messageID}
+// Test for Empty input: DELETE /user/{userName}/class/{className}/chat/{messageID}
 test('Empty input DELETE endpoint /user/{userName}/class/{className}/chat/{messageID}', async (t) => {
   const messageToDelete = ''
 
@@ -188,6 +188,7 @@ test('getClassChat resolves when called with a user name and className', async (
   }
 });
 
+// Test for GET /user/{userName}/class/{className}/chat
 test('GET endpoint /user/{userName}/class/{className}/chat', async (t) => {
   const { statusCode, body } = await t.context.got.get('user/{userName}/class/{className}/chat')
 
@@ -199,6 +200,7 @@ test('GET endpoint /user/{userName}/class/{className}/chat', async (t) => {
 
 })
 
+// Test for Multiple responses for GET /user/{userName}/class/{className}/chat
 test('Multiple responses for GET endpoint /user/{userName}/class/{className}/chat', async (t) => {
   const testData = [
     {
@@ -225,8 +227,10 @@ test('Multiple responses for GET endpoint /user/{userName}/class/{className}/cha
     },
   ];
 
+  // Iterate through the testData array
   for (const { input, expectedStatusCode } of testData) {
     try {
+      // Make a GET request to the specified endpoint for each test case
       const { statusCode, body } = await t.context.got.get(`user/${input.userName}/class/${input.className}/chat`);
 
       // Log the entire response object
@@ -244,7 +248,7 @@ test('Multiple responses for GET endpoint /user/{userName}/class/{className}/cha
 
 
 
-// Test for Empty className "input":    GET /user/{userName}/class/{className}/chat
+// Test for Empty className "input": GET /user/{userName}/class/{className}/chat
 test('Empty className GET endpoint /user/{userName}/class/{className}/chat', async (t) => {
   const userName = 'userName'
   const className = '' // Don't change that because the dummy data returns only for this className
@@ -256,11 +260,12 @@ test('Empty className GET endpoint /user/{userName}/class/{className}/chat', asy
   )
 })
 
-// Test for Empty userName and className "input":    GET     /user/{userName}/class/{className}
+// Test for Empty userName and className "input": GET /user/{userName}/class/{className}
 test('Empty both GET endpoint /user/{userName}/class/{className}/chat', async (t) => {
   const userName = ''
   const className = ''
 
+  // Expect an HTTPError with a 404 response code
   await t.throwsAsync(
     async () => {
       await t.context.got.get(`user/${userName}/class/${className}/chat`)
