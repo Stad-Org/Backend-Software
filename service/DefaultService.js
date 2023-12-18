@@ -110,7 +110,18 @@ exports.editUserInfo = function(body,userName) {
 exports.getClassChat = function(userName,className) {
   return new Promise(function(resolve, reject) {
     var examples = {};
-    examples['application/json'] = [ "", "" ];
+    examples['application/json'] = [ {
+        "userName" : "username",
+        "message" : "message",
+        "id" : 0
+      },
+      {
+        "userName" : "username1",
+        "message" : "message1",
+        "id" : 1
+      }
+    ]
+    
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
@@ -311,4 +322,3 @@ exports.uploadUserGrade = function(body,userName,className) {
     resolve();
   });
 }
-
