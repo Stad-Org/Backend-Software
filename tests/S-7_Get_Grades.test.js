@@ -135,3 +135,16 @@ const testValidGrade = (t, body) => {
   t.false(body.grade < 0, 'The grade should be a positive number')
   t.false(body.grade > 10, 'The maximum grade is 10')
 }
+
+/* invalid request for users grade
+ */ 
+test("GET /admin​/class​/{className}​/user​/{userName}​/grade", async (t) => {
+
+  const userName = undefined;
+  const className = undefined;
+
+  const result = await onlyFunc.getUserGrade(userName, className);
+
+  t.is(result, undefined);
+
+ }); 
