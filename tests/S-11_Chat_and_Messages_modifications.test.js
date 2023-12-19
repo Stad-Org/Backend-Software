@@ -190,7 +190,9 @@ test('getClassChat resolves when called with a user name and className', async (
 
 // Test for GET /user/{userName}/class/{className}/chat
 test('GET endpoint /user/{userName}/class/{className}/chat', async (t) => {
-  const { statusCode, body } = await t.context.got.get('user/{userName}/class/{className}/chat')
+  const userName = 'username'
+  const className = 'className'
+  const { statusCode, body } = await t.context.got.get(`user/${userName}/class/${className}/chat`)
 
   // Check status Code
   t.is(statusCode, 200, 'Expected status code 200 for successful get')
@@ -273,5 +275,14 @@ test('Empty both GET endpoint /user/{userName}/class/{className}/chat', async (t
     { instanceOf: t.context.got.HTTPError, message: /Response code 404/ }
   )
 })
+
+test('getClassChat resolves with undefined when userName and className are undefined', async (t) => {
+  const userName = undefined;
+  const className = undefined;
+
+  const result = await onlyFunc.getClassChat(userName, className);
+
+  t.is(result, undefined);
+});
 
 

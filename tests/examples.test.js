@@ -1,5 +1,5 @@
 // Example file for writing tests
-
+//const onlyFunc = require('../service/DefaultService.js');
 const test = require("ava");
 
 /**
@@ -93,4 +93,13 @@ test.after.always(async (t) => {
 //   t.is(body.email, "email");
 // });
 
+// /** bad request for user info  */
+// test("GET /user/{userName}", async (t) => {
+
+//   const userName = undefined;
+
+//   const result = await onlyFunc.getUserInfo(userName);
+
+//   t.is(result, undefined);
+// }) ; 
 //Functions for API calls

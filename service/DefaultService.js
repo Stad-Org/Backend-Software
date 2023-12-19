@@ -48,7 +48,7 @@ exports.deleteClass = function(className) {
     if (className === undefined) {
       // Reject the promise with an error indicating that className is undefined
 
-      reject({ statusCode: 400});
+      reject(Object.assign(new Error('400'), { statusCode: 400 }));
     } else {
       // Continue with the operation and resolve the promise
       resolve(/* some result if needed */);
@@ -122,7 +122,7 @@ exports.getClassChat = function(userName,className) {
       }
     ]
     
-    if (Object.keys(examples).length > 0) {
+    if (Object.keys(examples).length > 0 && ( userName !== undefined && className !== undefined) ) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
@@ -163,7 +163,7 @@ exports.getClassInfoAdmin = function(className) {
     }
   } ]
 };
-    if (Object.keys(examples).length > 0) {
+    if (Object.keys(examples).length > 0 && className !== undefined) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
@@ -205,7 +205,7 @@ exports.getClassInfoUser = function(userName,className) {
     }
   } ]
 };
-    if (Object.keys(examples).length > 0) {
+    if (Object.keys(examples).length > 0  && className !== undefined) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
@@ -230,7 +230,7 @@ exports.getUserGrade = function(userName,className) {
   "className" : className,
   "userName" : userName
 };
-    if (Object.keys(examples).length > 0) {
+    if (Object.keys(examples).length > 0 && (userName !== undefined && className !== undefined )) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
@@ -256,7 +256,7 @@ exports.getUserInfo = function(userName) {
   "userName" : "userName",
   "email" : "email"
 };
-    if (Object.keys(examples).length > 0) {
+    if (Object.keys(examples).length > 0 && userName !== undefined) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();

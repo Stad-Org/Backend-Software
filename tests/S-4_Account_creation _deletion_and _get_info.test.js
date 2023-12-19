@@ -361,3 +361,24 @@ test('Empty both GET endpoint /user/{userName}/class/{className}', async (t) => 
     t.context.got.get(`user/${userName}/class/${className}`)
   )
 })
+
+
+test("endpoint User", async (t) => {
+  const { body, statusCode } = await t.context.got("user/123");
+  t.is(statusCode, 200);
+  t.is(body.surname, "surname");
+  t.is(body.name, "name");
+  t.is(body.id, 0);
+  t.is(body.userName, "userName");
+  t.is(body.email, "email");
+});
+
+/** bad request for user info  */
+test("GET /user/{userName}", async (t) => {
+
+  const userName = undefined;
+
+  const result = await onlyFunc.getUserInfo(userName);
+
+  t.is(result, undefined);
+}) ; 
