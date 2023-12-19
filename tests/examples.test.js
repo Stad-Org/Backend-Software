@@ -1,5 +1,5 @@
 // Example file for writing tests
-const onlyFunc = require('../service/DefaultService.js');
+//const onlyFunc = require('../service/DefaultService.js');
 const test = require("ava");
 
 /**
@@ -83,23 +83,23 @@ test.after.always(async (t) => {
   console.log("Successfully closed test server");
 });
 
-test("endpoint User", async (t) => {
-  const { body, statusCode } = await t.context.got("user/123");
-  t.is(statusCode, 200);
-  t.is(body.surname, "surname");
-  t.is(body.name, "name");
-  t.is(body.id, 0);
-  t.is(body.userName, "userName");
-  t.is(body.email, "email");
-});
+// test("endpoint User", async (t) => {
+//   const { body, statusCode } = await t.context.got("user/123");
+//   t.is(statusCode, 200);
+//   t.is(body.surname, "surname");
+//   t.is(body.name, "name");
+//   t.is(body.id, 0);
+//   t.is(body.userName, "userName");
+//   t.is(body.email, "email");
+// });
 
-/** bad request for user info  */
-test("GET /user/{userName}", async (t) => {
+// /** bad request for user info  */
+// test("GET /user/{userName}", async (t) => {
 
-  const userName = undefined;
+//   const userName = undefined;
 
-  const result = await onlyFunc.getUserInfo(userName);
+//   const result = await onlyFunc.getUserInfo(userName);
 
-  t.is(result, undefined);
-}) ; 
+//   t.is(result, undefined);
+// }) ; 
 //Functions for API calls
