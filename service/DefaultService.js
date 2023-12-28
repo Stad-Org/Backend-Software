@@ -9,10 +9,19 @@
  * no response value expected for this operation
  **/
 exports.createClass = function(body) {
+  
   return new Promise(function(resolve, reject) {
-    resolve();
+    if (body == undefined || Object.keys(body).length === 0) {
+      // Reject the promise with a 400 Bad Request response
+      
+      reject({ statusCode: 400});
+    } else {
+      // Continue with the operation and resolve the promise
+      resolve(/* some result if needed */);
+    }
+   // resolve() ; 
   });
-}
+};
 
 
 /**
@@ -36,9 +45,16 @@ exports.createUser = function(body) {
  **/
 exports.deleteClass = function(className) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    if (className === undefined) {
+      // Reject the promise with an error indicating that className is undefined
+
+      reject(Object.assign(new Error('400'), { statusCode: 400 }));
+    } else {
+      // Continue with the operation and resolve the promise
+      resolve(/* some result if needed */);
+    }
   });
-}
+};
 
 
 /**
@@ -94,8 +110,19 @@ exports.editUserInfo = function(body,userName) {
 exports.getClassChat = function(userName,className) {
   return new Promise(function(resolve, reject) {
     var examples = {};
-    examples['application/json'] = [ "", "" ];
-    if (Object.keys(examples).length > 0) {
+    examples['application/json'] = [ {
+        "userName" : "username",
+        "message" : "message",
+        "id" : 0
+      },
+      {
+        "userName" : "username1",
+        "message" : "message1",
+        "id" : 1
+      }
+    ]
+    
+    if (Object.keys(examples).length > 0 && ( userName !== undefined && className !== undefined) ) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
@@ -115,7 +142,7 @@ exports.getClassInfoAdmin = function(className) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
-  "className" : "className",
+  "className" :  `${className}`,
   "users" : [ {
     "grade" : 6.027456183070403,
     "user" : {
@@ -130,13 +157,13 @@ exports.getClassInfoAdmin = function(className) {
     "user" : {
       "surname" : "surname",
       "name" : "name",
-      "id" : 0,
+      "id" : 1,
       "userName" : "userName",
       "email" : "email"
     }
   } ]
 };
-    if (Object.keys(examples).length > 0) {
+    if (Object.keys(examples).length > 0 && className !== undefined) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
@@ -172,13 +199,13 @@ exports.getClassInfoUser = function(userName,className) {
     "user" : {
       "surname" : "surname",
       "name" : "name",
-      "id" : 0,
+      "id" : 1,
       "userName" : "userName",
       "email" : "email"
     }
   } ]
 };
-    if (Object.keys(examples).length > 0) {
+    if (Object.keys(examples).length > 0  && className !== undefined) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
@@ -200,10 +227,10 @@ exports.getUserGrade = function(userName,className) {
     var examples = {};
     examples['application/json'] = {
   "grade" : 0.8008281904610115,
-  "className" : "className",
-  "username" : "username"
+  "className" : className,
+  "userName" : userName
 };
-    if (Object.keys(examples).length > 0) {
+    if (Object.keys(examples).length > 0 && (userName !== undefined && className !== undefined )) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
@@ -229,7 +256,7 @@ exports.getUserInfo = function(userName) {
   "userName" : "userName",
   "email" : "email"
 };
-    if (Object.keys(examples).length > 0) {
+    if (Object.keys(examples).length > 0 && userName !== undefined) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
@@ -261,7 +288,7 @@ exports.postClassMessage = function(body,userName,className) {
  * className String the name of the class
  * no response value expected for this operation
  **/
-exports.putClassInfouser = function(body,userName,className) {
+exports.putClassInfoUser = function(body,userName,className) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
@@ -295,4 +322,3 @@ exports.uploadUserGrade = function(body,userName,className) {
     resolve();
   });
 }
-
