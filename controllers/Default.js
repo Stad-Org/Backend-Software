@@ -1,8 +1,21 @@
 'use strict';
 
+// Import necessary utilities and services
 var utils = require('../utils/writer.js');
 var Default = require('../service/DefaultService');
 
+/**
+ * Creates a new class.
+ * This function takes a request object (req), a response object (res), 
+ * a next function for middleware, and the body of the request.
+ * It calls the 'createClass' function from the 'Default' service with the request body,
+ * then returns the response from the service through the 'utils.writeJson' method.
+ *
+ * @param {object} req - The request object.
+ * @param {object} res - The response object.
+ * @param {function} next - The next middleware function.
+ * @param {object} body - The body of the request, containing data for the new class.
+ */
 module.exports.createClass = function createClass (req, res, next, body) {
   Default.createClass(body)
     .then(function (response) {
@@ -13,6 +26,17 @@ module.exports.createClass = function createClass (req, res, next, body) {
     });
 };
 
+/**
+ * Creates a new user.
+ * Similar to 'createClass', this function takes a request object, a response object,
+ * a next function, and the body of the request. It calls the 'createUser' function
+ * from the 'Default' service with the request body and handles the service response.
+ *
+ * @param {object} req - The request object.
+ * @param {object} res - The response object.
+ * @param {function} next - The next middleware function.
+ * @param {object} body - The body of the request, containing data for the new user.
+ */
 module.exports.createUser = function createUser (req, res, next, body) {
   Default.createUser(body)
     .then(function (response) {
@@ -23,6 +47,17 @@ module.exports.createUser = function createUser (req, res, next, body) {
     });
 };
 
+/**
+ * Deletes an existing class.
+ * This function is responsible for deleting a class. It takes the class name from
+ * the request parameters and calls the 'deleteClass' function from the 'Default' service.
+ * The response from the service is then handled accordingly.
+ *
+ * @param {object} req - The request object.
+ * @param {object} res - The response object.
+ * @param {function} next - The next middleware function.
+ * @param {string} className - The name of the class to be deleted.
+ */
 module.exports.deleteClass = function deleteClass (req, res, next, className) {
   Default.deleteClass(className)
     .then(function (response) {
@@ -32,6 +67,7 @@ module.exports.deleteClass = function deleteClass (req, res, next, className) {
       utils.writeJson(res, response);
     });
 };
+
 
 module.exports.deleteMessage = function deleteMessage (req, res, next, userName, className, messageID) {
   Default.deleteMessage(userName, className, messageID)
