@@ -68,12 +68,6 @@ module.exports.deleteClass = function deleteClass (req, res, next, className) {
     });
 };
 
-'use strict';
-
-// Import necessary utilities and services
-var utils = require('../utils/writer.js');
-var Default = require('../service/DefaultService');
-
 /**
  * Deletes a specific message.
  * This function handles the deletion of a message in a class chat. It requires
@@ -182,11 +176,6 @@ module.exports.getClassInfoAdmin = function getClassInfoAdmin (req, res, next, c
       utils.writeJson(res, response);
     });
 };
-'use strict';
-
-// Import necessary utilities and services
-var utils = require('../utils/writer.js');
-var Default = require('../service/DefaultService');
 
 /**
  * Retrieves class information for a specific user.
