@@ -1,3 +1,5 @@
+const expectedClassObject = require('../types/types.js');
+
 const test = require("ava");
 const app = require("../index.js");
 const http = require("http");
@@ -63,34 +65,6 @@ function testValidClass(t, aClass) {
   }
 }
 
-/**
- * This is the expected response for the GET requests
- */
-const expectedClassObject = {
-  className: "maths",
-  users: [
-    {
-      grade: 6.027456183070403,
-      user: {
-        surname: "surname",
-        name: "name",
-        id: 0,
-        userName: "userName",
-        email: "email",
-      },
-    },
-    {
-      grade: 6.027456183070403,
-      user: {
-        surname: "surname",
-        name: "name",
-        id: 1,
-        userName: "userName",
-        email: "email",
-      },
-    },
-  ],
-};
 
 /**
  * These are some Classes to test class creation POST request
