@@ -39,7 +39,5 @@ function testValidUser(t, user) {
 module.exports = {
     testValidUser,
     testValidEnrolledUser,
-    testValidClass,
-    expectedClassObject,
-    exampleClassObjects
+    testValidClass
 }
