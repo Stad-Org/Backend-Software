@@ -20,6 +20,7 @@ exports.writeJson = function (response, arg1, arg2) {
 			? arg1
 			: 200;
 	let payload = arg1 instanceof ResponsePayload ? arg1.payload : arg1;
+
 	// If the payload is an object, stringify it with indentation for better readability
 	if (typeof payload === "object") {
 		payload = JSON.stringify(payload, null, 2);
