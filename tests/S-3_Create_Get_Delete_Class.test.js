@@ -1,3 +1,4 @@
+
 const test = require("ava");
 const app = require("../index.js");
 const http = require("http");
@@ -6,7 +7,10 @@ const got = require("got");
 const onlyFunc = require('../service/DefaultService.js');
 
 // Import utils from S-3_utils.js
-const { testValidClass, expectedClassObject, exampleClassObjects } = require('./S-3_utils.js');
+const { testValidClass} = require('./S-3_utils.js');
+
+// Import exampleClassObjects and expectedClassObject from types/types.js
+const { exampleClassObjects, expectedClassObject } = require('../types/types.js');
 
 // Initialize server
 test.before(async (t) => {
