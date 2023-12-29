@@ -1,6 +1,3 @@
-
-const test = require("ava");
-
 /**
 * Test User schema
 */

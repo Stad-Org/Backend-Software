@@ -1,6 +1,3 @@
-const expectedClassObject = require('../types/types.js');
-
-
 const test = require('ava')
 const app = require('../index.js');
 const http = require('http');
@@ -8,6 +5,9 @@ const listen = require('test-listen');
 const got = require('got');
 const { response } = require('express');
 const DefaultService = require('../service/DefaultService.js');
+
+const expectedClassObject = require('./_example_objects.js');
+
 
 // Initialize server
 test.before(async (t) => {
