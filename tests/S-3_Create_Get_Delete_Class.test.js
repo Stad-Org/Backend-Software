@@ -10,7 +10,7 @@ const onlyFunc = require('../service/DefaultService.js');
 const { testValidClass} = require('./S-3_utils.js');
 
 // Import exampleClassObjects and expectedClassObject from types/types.js
-const { exampleClassObjects, expectedClassObject } = require('../types/types.js');
+const { exampleClassObjects, expectedClassObject } = require('example_objects.js');
 
 // Initialize server
 test.before(async (t) => {
