@@ -6,7 +6,7 @@ const got = require('got');
 const { response } = require('express');
 const DefaultService = require('../service/DefaultService.js');
 
-const expectedClassObject = require('./example_objects.js');
+const expectedClassObject = require('./_example_objects.js');
 
 
 // Initialize server
