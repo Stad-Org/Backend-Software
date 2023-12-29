@@ -76,26 +76,26 @@ const exampleClassObjects = [
     ],
   },
   {
-    className: "className",
+    className: "theBestClass",
     users: [
       {
-        grade: 6,
+        grade: 9,
         user: {
-          surname: "kiasonas",
-          name: "name",
+          surname: "Papadopoulos",
+          name: "Giorgos",
           id: 0,
-          userName: "userName",
-          email: "email",
+          userName: "papGiorgos",
+          email: "papGiorgos@papadopoulos.com",
         },
       },
       {
         grade: 8,
         user: {
-          surname: "surname",
-          name: "name",
+          surname: "Georgiou",
+          name: "Giorgos",
           id: 1,
-          userName: "userName",
-          email: "tester@gmail.com",
+          userName: "GeoGeo",
+          email: "geo@geo.com",
         },
       },
     ],
