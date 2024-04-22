@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest #σε τι μηχάνημα τρέχει 
     steps: 
       - name: Checkout repo 
-        uses: actions/checkout@v2 #library
+        uses: actions/checkout@v4 #library
       
       - name: Setup node
         uses: actions/setup-node@v3
@@ -27,7 +27,7 @@ jobs:
     if: github.ref == 'refs/heads/main' # add comment here 
     steps: 
       - name : Chekout repo 
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name : Install Railway 
         run: npm i -g @railway/cli # The client for the railway 
