@@ -6,6 +6,9 @@ const got = require('got');
 const { response } = require('express');
 const DefaultService = require('../service/DefaultService.js');
 
+const expectedClassObject = require('./_example_objects.js');
+
+
 // Initialize server
 test.before(async (t) => {
     console.log("Creating test server")
@@ -25,37 +28,12 @@ test.after.always(async (t) => {
 /**
  * Class object to be used in tests
  */
-const exampleClassObject = {
-    className: "maths",
-    users: [
-        {
-            grade: 6.027456183070403,
-            user: {
-                surname: "surname",
-                name: "name",
-                id: 0,
-                userName: "userName",
-                email: "email",
-            },
-        },
-        {
-            grade: 6.027456183070403,
-            user: {
-                surname: "surname",
-                name: "name",
-                id: 1,
-                userName: "userName",
-                email: "email",
-            },
-        },
-    ],
-};
 
 // ------------------ Test putClassInfoAdmin & PUT /admin/class/{className} ------------------
 
 // Test service function
 test("putClassInfoAdmin", async (t) => {
-    const classroom = exampleClassObject
+    const classroom = expectedClassObject
     // The swaggerhub-generated backend doesn't do anything, so we can only
     // test that it doesn't throw
     await t.notThrowsAsync(
@@ -67,7 +45,7 @@ test("putClassInfoAdmin", async (t) => {
 test("PUT /admin/class/{className}", async (t) => {
     // Ideally would test for multiple different Class objects, but 
     // no point doing that since the backend doesn't do anything anyway
-    const classroom = exampleClassObject
+    const classroom = expectedClassObject
     // Test a bunch of valid requests
     const classNames = ["someClass", "someOtherClass"]
     for (const className of classNames) {
@@ -78,7 +56,7 @@ test("PUT /admin/class/{className}", async (t) => {
 
 // Test endpoint for empty className
 test("Wrong input PUT /admin/class/{className}", async (t) => {
-    const classroom = exampleClassObject
+    const classroom = expectedClassObject
     await t.throwsAsync(t.context.got.put(`admin/class/`, {json: classroom}))
 })
 
@@ -86,7 +64,7 @@ test("Wrong input PUT /admin/class/{className}", async (t) => {
 
 // Test service function
 test("putClassInfoUser", async (t) => {
-    const classroom = exampleClassObject
+    const classroom = expectedClassObject
     await t.notThrowsAsync(
         DefaultService.putClassInfoUser({json: classroom}, "userName", "className")
     )
@@ -97,7 +75,7 @@ test("putClassInfoUser", async (t) => {
 test("PUT /user/{userName}/class/{className}", async (t) => {
     // Ideally would test for multiple different Class objects, but 
     // no point doing that since the backend doesn't do anything anyway
-    const classroom = exampleClassObject
+    const classroom = expectedClassObject
     // Test a bunch of valid requests 
     const classNames = ["someClass", "someOtherClass"]
     const userNames = ["someUser", "someOtherUser"]
@@ -112,7 +90,7 @@ test("PUT /user/{userName}/class/{className}", async (t) => {
 // Test endpoint for incorrect input
 test("Wrong input PUT /user/{userName}/class/{className}", async (t) => {
     // Test that missing className or userName throws
-    const classroom = exampleClassObject
+    const classroom = expectedClassObject
     const input_pairs = [
         ["", "someClassName"],
         ["someUserName", ""],

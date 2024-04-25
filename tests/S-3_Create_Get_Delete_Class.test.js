@@ -1,9 +1,16 @@
+
 const test = require("ava");
 const app = require("../index.js");
 const http = require("http");
 const listen = require("test-listen");
 const got = require("got");
 const onlyFunc = require('../service/DefaultService.js');
+
+// Import utils from S-3_utils.js
+const { testValidClass } = require('./_S-3_utils.js');
+
+// Import exampleClassObjects and expectedClassObject from types/types.js
+const { exampleClassObjects, expectedClassObject } = require('./_example_objects.js');
 
 // Initialize server
 test.before(async (t) => {
@@ -24,131 +31,6 @@ test.after.always(async (t) => {
   console.log("Successfully closed test server");
 });
 
-
-
-
-// Some utility functions/objects for testing
-
-/**
-* Test User schema
-*/
-function testValidUser(t, user) {
-  t.is(typeof user.email, "string");
-  t.is(typeof user.name, "string");
-  t.is(typeof user.surname, "string");
-  t.is(typeof user.id, "number");
-}
-
-/**
- * Test EnrolledUser schema
-*/
-function testValidEnrolledUser(t, enrolledUser) {
-  t.is(typeof enrolledUser.grade, "number");
-  t.true(enrolledUser.grade >= 0 && enrolledUser.grade <= 10);
-  testValidUser(t, enrolledUser.user);
-}
-
-/**
- * Test Class schema
- */
-function testValidClass(t, aClass) {
-  t.is(typeof aClass.className, "string");
-  t.true(Array.isArray(aClass.users));
-  prevId = -1;
-  for (enrolledUser of aClass.users) {
-    testValidEnrolledUser(t, enrolledUser);
-    // Ids should be sorted
-    t.true(enrolledUser.user.id > prevId);
-    prevId = enrolledUser.user.id;
-  }
-}
-
-/**
- * This is the expected response for the GET requests
- */
-const expectedClassObject = {
-  className: "maths",
-  users: [
-    {
-      grade: 6.027456183070403,
-      user: {
-        surname: "surname",
-        name: "name",
-        id: 0,
-        userName: "userName",
-        email: "email",
-      },
-    },
-    {
-      grade: 6.027456183070403,
-      user: {
-        surname: "surname",
-        name: "name",
-        id: 1,
-        userName: "userName",
-        email: "email",
-      },
-    },
-  ],
-};
-
-/**
- * These are some Classes to test class creation POST request
- */
-const exampleClassObjects = [{
-  "className": "className",
-  "users": [
-    {
-      "grade": 6,
-      "user": {
-        "surname": "kiasonas",
-        "name": "name",
-        "id": 0,
-        "userName": "userName",
-        "email": "email"
-      }
-    },
-    {
-      "grade": 8,
-      "user": {
-        "surname": "surname",
-        "name": "name",
-        "id": 1,
-        "userName": "userName",
-        "email": "tester@gmail.com"
-      }
-    }
-  ]
-}, {
-  "className": "className",
-  "users": [
-    {
-      "grade": 6,
-      "user": {
-        "surname": "kiasonas",
-        "name": "name",
-        "id": 0,
-        "userName": "userName",
-        "email": "email"
-      }
-    },
-    {
-      "grade": 8,
-      "user": {
-        "surname": "surname",
-        "name": "name",
-        "id": 1,
-        "userName": "userName",
-        "email": "tester@gmail.com"
-      }
-    }
-  ]
-}]
-
-
-
-
-// Actual tests start here
 
 /**
  * GET admin class info
@@ -315,6 +197,7 @@ test('Delete class with undefined className should reject with status code 400',
   // Check the properties of the rejected value
   t.is(result.statusCode, 400);
 });
+
 /** 
  * GET class (user)
  */
