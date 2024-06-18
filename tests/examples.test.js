@@ -52,54 +52,120 @@ test("addNumbers", (t) => {
 //   t.is(res.email, "email");
 // });
 
-// Server testing
 
-const app = require("../index.js"); // the app with the routes
-const http = require("http"); // take the express app and go live as a server
-const listen = require("test-listen"); // create a test server to send requests
-const got = require("got"); // for requests
+// 1. 
+const test = require('ava')
+const app = require('../index.js')
+const http = require('http')
+const listen = require('test-listen')
+const got = require('got')
+const func = require('../service/DefaultService.js');
 
-/**
- * before the test of the files run this function is running
- */
+
+// 2. 
+// Initialize server
 test.before(async (t) => {
-  console.log("Creating test server");
-  t.context.server = http.createServer(app); // I can save things here. I create the server
-  t.context.prefixUrl = await listen(t.context.server); // Where to send the requests. Async function
-  t.context.got = got.extend({
-    //change default settings
-    prefixUrl: t.context.prefixUrl, //the url where we send requests
-    responseType: "json",
-  });
-  console.log("Successfully created test server");
-});
+    console.log('Creating test server')
+    t.context.server = http.createServer(app)
+    t.context.prefixUrl = await listen(t.context.server)
+    t.context.got = got.extend({ prefixUrl: t.context.prefixUrl, responseType: 'json' })
+    console.log('Successfully created test server')
+})
 
-/**
- * After all the tests have finished
- */
+// Shutdown server
 test.after.always(async (t) => {
-  console.log("Testing finished, closing test server");
-  await t.context.server.close();
-  console.log("Successfully closed test server");
-});
+    console.log('Testing finished, closing test server')
+    await t.context.server.close()
+    console.log('Successfully closed test server')
+})
 
-// test("endpoint User", async (t) => {
-//   const { body, statusCode } = await t.context.got("user/123");
-//   t.is(statusCode, 200);
-//   t.is(body.surname, "surname");
-//   t.is(body.name, "name");
-//   t.is(body.id, 0);
-//   t.is(body.userName, "userName");
-//   t.is(body.email, "email");
-// });
+  
+// GET 
 
-// /** bad request for user info  */
-// test("GET /user/{userName}", async (t) => {
+test('booksGET function', async (t) =>{
+    const body = await func.booksGET();
+    console.log(body);
+    t.is(body.length, 2);
+    t.is(body[0].title, 'title');
 
-//   const userName = undefined;
+})
 
-//   const result = await onlyFunc.getUserInfo(userName);
+test('GET /books', async (t) =>{
+    const { body, statusCode } = await t.context.got.get(`books`);
+    t.is(body.length, 2);
+    t.is(statusCode, 200);
 
-//   t.is(result, undefined);
-// }) ; 
-//Functions for API calls
+})
+
+// POST 
+
+test('booksPOST function', async (t) => {
+    const book = {
+        author : "author_test",
+        isbn : "isbn_test",
+        available : true,
+        id : 0,
+        title : "title_test"
+    }
+    // Check that the function does NOT throw an error
+    await t.notThrowsAsync(async () => {
+        await func.booksPOST(book);
+    });
+})
+
+test('POST books', async (t) => {
+
+    const {statusCode} = await t.context.got.post(`books`, {
+        json: {
+            author : "author_test",
+            isbn : "isbn_test",
+            available : true,
+            id : 0,
+            title : "title_test"
+        }
+    })
+
+    t.is(statusCode, 200);
+})
+
+
+// PUT 
+
+test('usersUserIdPUT function', async (t) => {
+    const new_info = 
+        {
+            name: "new_name",
+            email: "new_email"
+          }
+    await t.notThrowsAsync(async() =>{
+        await func.usersUserIdPUT(new_info);
+    });
+})
+
+
+test('PUT users id', async (t) => {
+    const userId = 1;
+   
+    const {statusCode} = await t.context.got.put(`users/${userId}`, )
+    t.is(statusCode, 200);
+})
+
+
+// DELETE 
+
+test('booksBookIdDELETE function', async (t) => {
+    const bookId = "1";
+    await t.notThrowsAsync(func.booksBookIdDELETE(bookId));
+
+})
+
+test('DELETE /books/{bookId}', async (t) => {
+    const bookId = 0;
+
+    const {statusCode} = await t.context.got.delete(`books/${bookId}`)
+    t.is(statusCode, 200);
+})
+
+  
+
+
